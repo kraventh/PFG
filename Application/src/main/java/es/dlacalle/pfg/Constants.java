@@ -17,7 +17,7 @@
 package es.dlacalle.pfg;
 
 /**
- * Defines several constants used between {@link BluetoothService} and the UI.
+ * Defines several constants used between {@link es.dlacalle.pfg.servicios.ServicioBluetooth} and the UI.
  */
 public interface Constants {
 

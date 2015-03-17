@@ -26,4 +26,8 @@
         android:icon="@drawable/ic_action_action_settings"
         android:showAsAction="ifRoom"
         android:title="@string/action_settings"/>
+    <item
+        android:id="@+id/menu_act_notificaciones"
+        android:title="N" />
+
 </menu>

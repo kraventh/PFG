@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package es.dlacalle.pfg;
+package es.dlacalle.pfg.servicios;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -26,6 +26,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import es.dlacalle.common.logger.Log;
+import es.dlacalle.pfg.Constants;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,7 +39,7 @@ import java.util.UUID;
  * incoming connections, a thread for connecting with a device, and a
  * thread for performing data transmissions when connected.
  */
-public class BluetoothService {
+public class ServicioBluetooth {
     // Debugging
     private static final String TAG = "BluetoothChatService";
 
@@ -73,7 +74,7 @@ public class BluetoothService {
      * @param context The UI Activity Context
      * @param handler A Handler to send messages back to the UI Activity
      */
-    public BluetoothService(Context context, Handler handler) {
+    public ServicioBluetooth(Context context, Handler handler) {
         mAdapter = BluetoothAdapter.getDefaultAdapter();
         mState = STATE_NONE;
         mHandler = handler;
@@ -264,7 +265,7 @@ public class BluetoothService {
         mHandler.sendMessage(msg);
 
         // Start the service over to restart listening mode
-        BluetoothService.this.start();
+        ServicioBluetooth.this.start();
     }
 
     /**
@@ -279,7 +280,7 @@ public class BluetoothService {
         mHandler.sendMessage(msg);
 
         // Start the service over to restart listening mode
-        BluetoothService.this.start();
+        ServicioBluetooth.this.start();
     }
 
     /**
@@ -331,7 +332,7 @@ public class BluetoothService {
 
                 // If a connection was accepted
                 if (socket != null) {
-                    synchronized (BluetoothService.this) {
+                    synchronized (ServicioBluetooth.this) {
                         switch (mState) {
                             case STATE_LISTEN:
                             case STATE_CONNECTING:
@@ -423,7 +424,7 @@ public class BluetoothService {
             }
 
             // Reset the ConnectThread because we're done
-            synchronized (BluetoothService.this) {
+            synchronized (ServicioBluetooth.this) {
                 mConnectThread = null;
             }
 
@@ -485,7 +486,7 @@ public class BluetoothService {
                     Log.e(TAG, "disconnected", e);
                     connectionLost();
                     // Start the service over to restart listening mode
-                    BluetoothService.this.start();
+                    ServicioBluetooth.this.start();
                     break;
                 }
             }

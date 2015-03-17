@@ -11,14 +11,9 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
-import android.widget.TextView;
-
 
 import java.util.ArrayList;
 import java.util.List;
-
-import es.dlacalle.pfg.dummy.DummyContent;
-import es.dlacalle.pfg.FilaAppList;
 
 /**
  * A fragment representing a list of Items.
@@ -44,8 +39,8 @@ public class ConfigFragment extends Fragment implements AbsListView.OnItemClickL
      */
     private MiArrayAdapter mAdapter;
 
-    // TODO: Rename and change types of parameters
-    public static ConfigFragment newInstance(String param1, String param2) {
+
+    public static ConfigFragment newInstance() {
         ConfigFragment fragment = new ConfigFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -111,7 +106,7 @@ public class ConfigFragment extends Fragment implements AbsListView.OnItemClickL
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " debe implementar OnFragmentInteractionListener");
         }
     }
 
@@ -136,19 +131,6 @@ public class ConfigFragment extends Fragment implements AbsListView.OnItemClickL
     }
 
     /**
-     * The default content for this Fragment has a TextView that is shown when
-     * the list is empty. If you would like to change the text, call this method
-     * to supply the text it should use.
-     */
-    public void setEmptyText(CharSequence emptyText) {
-        View emptyView = mListView.getEmptyView();
-
-        if (emptyView instanceof TextView) {
-            ((TextView) emptyView).setText(emptyText);
-        }
-    }
-
-    /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
@@ -159,8 +141,9 @@ public class ConfigFragment extends Fragment implements AbsListView.OnItemClickL
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         public void onFragmentInteraction(String id);
     }
+
+
 
 }

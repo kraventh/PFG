@@ -43,7 +43,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import es.dlacalle.common.logger.Log;
-import es.dlacalle.pfg.Constants;
+import es.dlacalle.pfg.servicios.ServicioBluetooth;
 
 /**
  * This fragment controls Bluetooth to communicate with other devices.
@@ -80,7 +80,7 @@ public class PFGFragment extends Fragment {
     /**
      * Member object for the chat services
      */
-    private BluetoothService mChatService = null;
+    private ServicioBluetooth mChatService = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -129,7 +129,7 @@ public class PFGFragment extends Fragment {
         // onResume() will be called when ACTION_REQUEST_ENABLE activity returns.
         if (mChatService != null) {
             // Only if the state is STATE_NONE, do we know that we haven't started already
-            if (mChatService.getState() == BluetoothService.STATE_NONE) {
+            if (mChatService.getState() == ServicioBluetooth.STATE_NONE) {
                 // Start the Bluetooth chat services
                 mChatService.start();
             }
@@ -177,7 +177,7 @@ public class PFGFragment extends Fragment {
         });
 
         // Initialize the BluetoothChatService to perform bluetooth connections
-        mChatService = new BluetoothService(getActivity(), mHandler);
+        mChatService = new ServicioBluetooth(getActivity(), mHandler);
 
         // Initialize the buffer for outgoing messages
         mOutStringBuffer = new StringBuffer("");
@@ -203,7 +203,7 @@ public class PFGFragment extends Fragment {
      */
     private void sendMessage(String message) {
         // Check that we're actually connected before trying anything
-        if (mChatService.getState() != BluetoothService.STATE_CONNECTED) {
+        if (mChatService.getState() != ServicioBluetooth.STATE_CONNECTED) {
             Toast.makeText(getActivity(), R.string.not_connected, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -281,15 +281,15 @@ public class PFGFragment extends Fragment {
                 switch (msg.what) {
                     case Constants.MESSAGE_STATE_CHANGE:
                         switch (msg.arg1) {
-                            case BluetoothService.STATE_CONNECTED:
+                            case ServicioBluetooth.STATE_CONNECTED:
                                 setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
                                 mConversationArrayAdapter.clear();
                                 break;
-                            case BluetoothService.STATE_CONNECTING:
+                            case ServicioBluetooth.STATE_CONNECTING:
                                 setStatus(R.string.title_connecting);
                                 break;
-                            case BluetoothService.STATE_LISTEN:
-                            case BluetoothService.STATE_NONE:
+                            case ServicioBluetooth.STATE_LISTEN:
+                            case ServicioBluetooth.STATE_NONE:
                                 setStatus(R.string.title_not_connected);
                                 break;
                         }

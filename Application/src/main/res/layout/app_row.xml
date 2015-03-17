@@ -24,13 +24,13 @@
         android:contentDescription="@string/text_app_icon"/>
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         >
         <TextView
             android:id="@+id/app_row_label"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:text="@string/Linea"
@@ -38,11 +38,12 @@
             />
         <TextView
             android:id="@+id/app_row_pkglabel"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/Linea"
             android:textSize="12sp"
             />
 
     </LinearLayout>
+
 </LinearLayout>

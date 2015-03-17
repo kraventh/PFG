@@ -16,12 +16,15 @@
 
 package es.dlacalle.pfg;
 
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import es.dlacalle.common.activities.SampleActivityBase;
 import es.dlacalle.common.logger.Log;
@@ -37,7 +40,8 @@ import es.dlacalle.common.logger.MessageOnlyLogFilter;
  * on other devices it's visibility is controlled by an item on the Action Bar.
  */
 public class MainActivity extends SampleActivityBase
-    implements ConfigFragment.OnFragmentInteractionListener{
+    implements ConfigFragment.OnFragmentInteractionListener,
+        NotificacionesFragment.OnFragmentInteractionListener {
 
     public static final String TAG = "MainActivity";
 
@@ -56,6 +60,8 @@ public class MainActivity extends SampleActivityBase
             transaction.commit();
         }
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -87,10 +93,25 @@ public class MainActivity extends SampleActivityBase
                 ConfigFragment fragment = new ConfigFragment();
                 transaction.replace(R.id.sample_content_fragment, fragment);
                 transaction.commit();
-
+            }
+            case R.id.menu_act_notificaciones: {
+                //Cambia al ConfigFragment para seleccionar la aplicación
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                NotificacionesFragment fragment = new NotificacionesFragment();
+                transaction.replace(R.id.sample_content_fragment, fragment);
+                transaction.commit();
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onButtonClick(View view){
+        switch(view.getId()){
+            case R.id.boton_permitir_servicio:
+                Intent intent=new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+                startActivity(intent);
+                break;
+        }
     }
 
     /** Create a chain of targets that will receive log data */
@@ -116,5 +137,8 @@ public class MainActivity extends SampleActivityBase
         public void onFragmentInteraction(String id){
             //nothing by now
         }
+    public void onFragmentInteraction(Uri uri){
+
+    }
 
 }
