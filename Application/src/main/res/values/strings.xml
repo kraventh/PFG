@@ -37,4 +37,9 @@
     <string name="secure_connect">Conectar dispositivo</string>
     <string name="action_settings">Configuración</string>
 
+    <!-- ConfigFragment -->
+
+    <string name="text_app_icon">Icono de aplicación</string>
+    <string name="Linea">Label</string>
+
 </resources>

@@ -16,6 +16,8 @@
 
 package es.dlacalle.pfg;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
@@ -34,7 +36,8 @@ import es.dlacalle.common.logger.MessageOnlyLogFilter;
  * For devices with displays with a width of 720dp or greater, the sample log is always visible,
  * on other devices it's visibility is controlled by an item on the Action Bar.
  */
-public class MainActivity extends SampleActivityBase {
+public class MainActivity extends SampleActivityBase
+    implements ConfigFragment.OnFragmentInteractionListener{
 
     public static final String TAG = "MainActivity";
 
@@ -71,19 +74,22 @@ public class MainActivity extends SampleActivityBase {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        /*switch(item.getItemId()) {
-            case R.id.menu_toggle_log:
-                mLogShown = !mLogShown;
-                ViewAnimator output = (ViewAnimator) findViewById(R.id.sample_output);
-                if (mLogShown) {
-                    output.setDisplayedChild(1);
-                } else {
-                    output.setDisplayedChild(0);
-                }
-                supportInvalidateOptionsMenu();
+        switch (item.getItemId()) {
+            case R.id.menu_connect_scan_bt: {
+                // Launch the DeviceListActivity to see devices and do scan
+                Intent serverIntent = new Intent(this, DeviceListActivity.class);
+                startActivityForResult(serverIntent, Constants.REQUEST_CONNECT_DEVICE_SECURE);
                 return true;
+            }
+            case R.id.menu_settings: {
+                //Cambia al ConfigFragment para seleccionar la aplicación
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                ConfigFragment fragment = new ConfigFragment();
+                transaction.replace(R.id.sample_content_fragment, fragment);
+                transaction.commit();
 
-        }*/
+            }
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -106,4 +112,9 @@ public class MainActivity extends SampleActivityBase {
 
         Log.i(TAG, "Ready");
     }
+
+        public void onFragmentInteraction(String id){
+            //nothing by now
+        }
+
 }

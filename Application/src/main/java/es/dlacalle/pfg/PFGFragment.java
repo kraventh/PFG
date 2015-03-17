@@ -43,17 +43,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import es.dlacalle.common.logger.Log;
+import es.dlacalle.pfg.Constants;
 
 /**
  * This fragment controls Bluetooth to communicate with other devices.
  */
 public class PFGFragment extends Fragment {
 
-    private static final String TAG = "BluetoothChatFragment";
-
-    // Intent request codes
-    private static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
-    private static final int REQUEST_ENABLE_BT = 3;
+    private static final String TAG = "PFGFragment";
 
     // Layout Views
     private ListView mConversationView;
@@ -108,7 +105,7 @@ public class PFGFragment extends Fragment {
         // setupChat() will then be called during onActivityResult
         if (!mBluetoothAdapter.isEnabled()) {
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+            startActivityForResult(enableIntent, Constants.REQUEST_ENABLE_BT);
             // Otherwise, setup the chat session
         } else if (mChatService == null) {
             setupChat();
@@ -142,7 +139,7 @@ public class PFGFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_bluetooth_chat, container, false);
+        return inflater.inflate(R.layout.fragment_pfg, container, false);
     }
 
     @Override
@@ -329,14 +326,14 @@ public class PFGFragment extends Fragment {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case REQUEST_CONNECT_DEVICE_SECURE:
+            case Constants.REQUEST_CONNECT_DEVICE_SECURE:
                 // When DeviceListActivity returns with a device to connect
                 if (resultCode == Activity.RESULT_OK) {
                     connectDevice(data, true);
                 }
                 break;
 
-            case REQUEST_ENABLE_BT:
+            case Constants.REQUEST_ENABLE_BT:
                 // When the request to enable Bluetooth returns
                 if (resultCode == Activity.RESULT_OK) {
                     // Bluetooth is now enabled, so set up a chat session
@@ -374,14 +371,18 @@ public class PFGFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.secure_connect_scan: {
+        /*switch (item.getItemId()) {
+            case R.id.menu_connect_scan_bt: {
                 // Launch the DeviceListActivity to see devices and do scan
                 Intent serverIntent = new Intent(getActivity(), DeviceListActivity.class);
                 startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_SECURE);
                 return true;
             }
-        }
+            case R.id.menu_settings: {
+                //Cambia al ConfigFragment para seleccionar la aplicación
+
+            }
+        }*/
         return false;
     }
 

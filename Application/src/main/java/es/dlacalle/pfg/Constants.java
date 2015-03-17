@@ -21,6 +21,10 @@ package es.dlacalle.pfg;
  */
 public interface Constants {
 
+    //Intent request codes
+    public static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
+    public static final int REQUEST_ENABLE_BT = 3;
+
     // Message types sent from the BluetoothChatService Handler
     public static final int MESSAGE_STATE_CHANGE = 1;
     public static final int MESSAGE_READ = 2;
