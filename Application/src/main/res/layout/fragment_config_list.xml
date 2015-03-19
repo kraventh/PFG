@@ -12,13 +12,22 @@
         android:layout_alignParentLeft="false"
         android:layout_marginLeft="0dp"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="0dp"
-        android:layout_centerHorizontal="true" />
+        android:layout_marginTop="0dp" />
 
     <ListView android:id="@android:id/list" android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="0dp"
         android:layout_marginTop="0dp"
         android:layout_below="@+id/boton_permitir_servicio" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Guardar preferencias"
+        android:id="@+id/boton_guarda_prefs"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/boton_permitir_servicio"
+        android:layout_alignParentRight="true"
+        android:onClick="onButtonClick" />
 
 </RelativeLayout>

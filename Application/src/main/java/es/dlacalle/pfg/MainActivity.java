@@ -16,15 +16,17 @@
 
 package es.dlacalle.pfg;
 
-import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
+import android.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import es.dlacalle.common.activities.SampleActivityBase;
 import es.dlacalle.common.logger.Log;
@@ -39,11 +41,23 @@ import es.dlacalle.common.logger.MessageOnlyLogFilter;
  * For devices with displays with a width of 720dp or greater, the sample log is always visible,
  * on other devices it's visibility is controlled by an item on the Action Bar.
  */
+
+//ToDo implementar sharedpreferences
 public class MainActivity extends SampleActivityBase
     implements ConfigFragment.OnFragmentInteractionListener,
         NotificacionesFragment.OnFragmentInteractionListener {
 
     public static final String TAG = "MainActivity";
+
+    private NotificationReceiver nReceiver;
+    private TextView textView;
+
+    PFGFragment pfgFragment;
+    ConfigFragment configFragment;
+    NotificacionesFragment notifiFragment;
+
+
+
 
     // Whether the Log Fragment is currently shown
     //private boolean mLogShown;
@@ -53,12 +67,38 @@ public class MainActivity extends SampleActivityBase
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        pfgFragment = new PFGFragment();
+        configFragment = new ConfigFragment();
+        notifiFragment = new NotificacionesFragment();
+
+        nReceiver = new NotificationReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("es.dlacalle.pfg.servicios.NOTIFICATION_LISTENER_EXAMPLE");
+        registerReceiver(nReceiver, filter);
+
+        textView = (TextView) findViewById(R.id.principal_textview);
+
+
         if (savedInstanceState == null) {
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            PFGFragment fragment = new PFGFragment();
-            transaction.replace(R.id.sample_content_fragment, fragment);
+
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+            // Add the fragment to the 'fragment_container' FrameLayout
+            // Replace whatever is in the fragment_container view with this fragment,
+            // and add the transaction to the back stack so the user can navigate back
+            transaction.replace(R.id.sample_content_fragment, pfgFragment);
+            transaction.addToBackStack(null);
+
+            // Commit the transaction
             transaction.commit();
+
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(nReceiver);
     }
 
 
@@ -71,9 +111,6 @@ public class MainActivity extends SampleActivityBase
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        //MenuItem logToggle = menu.findItem(R.id.menu_toggle_log);
-        //logToggle.setVisible(findViewById(R.id.sample_output) instanceof ViewAnimator);
-        //logToggle.setTitle(mLogShown ? R.string.sample_hide_log : R.string.sample_show_log);
 
         return super.onPrepareOptionsMenu(menu);
     }
@@ -82,25 +119,44 @@ public class MainActivity extends SampleActivityBase
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_connect_scan_bt: {
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.sample_content_fragment, pfgFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+                pfgFragment.onOptionsItemSelected(item);
                 // Launch the DeviceListActivity to see devices and do scan
-                Intent serverIntent = new Intent(this, DeviceListActivity.class);
+                /*Intent serverIntent = new Intent(this, DeviceListActivity.class);
                 startActivityForResult(serverIntent, Constants.REQUEST_CONNECT_DEVICE_SECURE);
-                return true;
+                return true;*/
             }
             case R.id.menu_settings: {
                 //Cambia al ConfigFragment para seleccionar la aplicación
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                ConfigFragment fragment = new ConfigFragment();
-                transaction.replace(R.id.sample_content_fragment, fragment);
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+                transaction.replace(R.id.sample_content_fragment, configFragment);
+                transaction.addToBackStack(null);
                 transaction.commit();
+                break;
             }
             case R.id.menu_act_notificaciones: {
+                //textView.setText("Pulsado N");
                 //Cambia al ConfigFragment para seleccionar la aplicación
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                NotificacionesFragment fragment = new NotificacionesFragment();
-                transaction.replace(R.id.sample_content_fragment, fragment);
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+                transaction.replace(R.id.sample_content_fragment, notifiFragment);
+                transaction.addToBackStack(null);
                 transaction.commit();
+                break;
             }
+            case R.id.menu_lista_notificaciones:{
+                Intent i = new Intent("es.dlacalle.pfg.servicios.NOTIFICATION_LISTENER_SERVICE_EXAMPLE");
+                i.putExtra("command","list");
+                sendBroadcast(i);
+                break;
+            }
+            case R.id.menu_limpiar_notificaciones:
+                textView.setText("");
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -110,6 +166,9 @@ public class MainActivity extends SampleActivityBase
             case R.id.boton_permitir_servicio:
                 Intent intent=new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
                 startActivity(intent);
+                break;
+            case R.id.boton_guarda_prefs:
+                getFragmentManager().popBackStack();
                 break;
         }
     }
@@ -139,6 +198,15 @@ public class MainActivity extends SampleActivityBase
         }
     public void onFragmentInteraction(Uri uri){
 
+    }
+
+    class NotificationReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String temp = intent.getStringExtra("notification_event") + "\n" + textView.getText();
+            textView.setText(temp);
+        }
     }
 
 }

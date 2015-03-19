@@ -24,22 +24,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.app.Fragment;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import es.dlacalle.common.logger.Log;
@@ -53,19 +45,11 @@ public class PFGFragment extends Fragment {
     private static final String TAG = "PFGFragment";
 
     // Layout Views
-    private ListView mConversationView;
-    private EditText mOutEditText;
-    private Button mSendButton;
 
     /**
      * Name of the connected device
      */
     private String mConnectedDeviceName = null;
-
-    /**
-     * Array adapter for the conversation thread
-     */
-    private ArrayAdapter<String> mConversationArrayAdapter;
 
     /**
      * String buffer for outgoing messages
@@ -91,7 +75,7 @@ public class PFGFragment extends Fragment {
 
         // If the adapter is null, then Bluetooth is not supported
         if (mBluetoothAdapter == null) {
-            FragmentActivity activity = getActivity();
+            Activity activity = getActivity();
             Toast.makeText(activity, "Bluetooth no disponible", Toast.LENGTH_LONG).show();
             activity.finish();
         }
@@ -142,39 +126,11 @@ public class PFGFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_pfg, container, false);
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        mConversationView = (ListView) view.findViewById(R.id.in);
-        mOutEditText = (EditText) view.findViewById(R.id.edit_text_out);
-        mSendButton = (Button) view.findViewById(R.id.button_send);
-    }
-
     /**
      * Set up the UI and background operations for chat.
      */
     private void setupChat() {
         Log.d(TAG, "setupChat()");
-
-        // Initialize the array adapter for the conversation thread
-        mConversationArrayAdapter = new ArrayAdapter<>(getActivity(), R.layout.message);
-
-        mConversationView.setAdapter(mConversationArrayAdapter);
-
-        // Initialize the compose field with a listener for the return key
-        mOutEditText.setOnEditorActionListener(mWriteListener);
-
-        // Initialize the send button with a listener that for click events
-        mSendButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Send a message using content of the edit text widget
-                View view = getView();
-                if (null != view) {
-                    TextView textView = (TextView) view.findViewById(R.id.edit_text_out);
-                    String message = textView.getText().toString();
-                    sendMessage(message);
-                }
-            }
-        });
 
         // Initialize the BluetoothChatService to perform bluetooth connections
         mChatService = new ServicioBluetooth(getActivity(), mHandler);
@@ -216,24 +172,9 @@ public class PFGFragment extends Fragment {
 
             // Reset out string buffer to zero and clear the edit text field
             mOutStringBuffer.setLength(0);
-            mOutEditText.setText(mOutStringBuffer);
+
         }
     }
-
-    /**
-     * The action listener for the EditText widget, to listen for the return key
-     */
-    private TextView.OnEditorActionListener mWriteListener
-            = new TextView.OnEditorActionListener() {
-        public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
-            // If the action is a key-up event on the return key, send the message
-            if (actionId == EditorInfo.IME_NULL && event.getAction() == KeyEvent.ACTION_UP) {
-                String message = view.getText().toString();
-                sendMessage(message);
-            }
-            return true;
-        }
-    };
 
     /**
      * Updates the status on the action bar.
@@ -241,7 +182,7 @@ public class PFGFragment extends Fragment {
      * @param resId a string resource ID
      */
     private void setStatus(int resId) {
-        FragmentActivity activity = getActivity();
+        Activity activity = getActivity();
         if (null == activity) {
             return;
         }
@@ -258,7 +199,7 @@ public class PFGFragment extends Fragment {
      * @param subTitle status
      */
     private void setStatus(CharSequence subTitle) {
-        FragmentActivity activity = getActivity();
+        Activity activity = getActivity();
         if (null == activity) {
             return;
         }
@@ -277,13 +218,12 @@ public class PFGFragment extends Fragment {
 
         @Override
         public void handleMessage(Message msg) {
-            FragmentActivity activity = getActivity();
+            Activity activity = getActivity();
                 switch (msg.what) {
                     case Constants.MESSAGE_STATE_CHANGE:
                         switch (msg.arg1) {
                             case ServicioBluetooth.STATE_CONNECTED:
                                 setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
-                                mConversationArrayAdapter.clear();
                                 break;
                             case ServicioBluetooth.STATE_CONNECTING:
                                 setStatus(R.string.title_connecting);
@@ -298,13 +238,11 @@ public class PFGFragment extends Fragment {
                         byte[] writeBuf = (byte[]) msg.obj;
                         // construct a string from the buffer
                         String writeMessage = new String(writeBuf);
-                        mConversationArrayAdapter.add("Me:  " + writeMessage);
                         break;
                     case Constants.MESSAGE_READ:
                         byte[] readBuf = (byte[]) msg.obj;
                         // construct a string from the valid bytes in the buffer
                         String readMessage = new String(readBuf, 0, msg.arg1);
-                        mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
                         break;
                     case Constants.MESSAGE_DEVICE_NAME:
                         // save the connected device's name
@@ -328,6 +266,7 @@ public class PFGFragment extends Fragment {
         switch (requestCode) {
             case Constants.REQUEST_CONNECT_DEVICE_SECURE:
                 // When DeviceListActivity returns with a device to connect
+
                 if (resultCode == Activity.RESULT_OK) {
                     connectDevice(data, true);
                 }
@@ -360,7 +299,7 @@ public class PFGFragment extends Fragment {
                 .getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
         // Get the BluetoothDevice object
         BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
-        // Attempt to connect to the device
+        // Attempt to connect to the device - hasta aquí bien
         mChatService.connect(device, secure);
     }
 
@@ -371,18 +310,18 @@ public class PFGFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        /*switch (item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.menu_connect_scan_bt: {
                 // Launch the DeviceListActivity to see devices and do scan
                 Intent serverIntent = new Intent(getActivity(), DeviceListActivity.class);
-                startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_SECURE);
+                startActivityForResult(serverIntent, Constants.REQUEST_CONNECT_DEVICE_SECURE);
                 return true;
             }
-            case R.id.menu_settings: {
+            /*case R.id.menu_settings: {
                 //Cambia al ConfigFragment para seleccionar la aplicación
 
-            }
-        }*/
+            }*/
+        }
         return false;
     }
 

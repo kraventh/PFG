@@ -42,7 +42,8 @@
     <string name="text_app_icon">Icono de aplicación</string>
     <string name="Linea">Label</string>
 
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- NotificacionesFragment -->
+    <string name="lista_notificaciones">Listar notificaciones</string>
+    <string name="ultimas_notificaciones">Ultimas notificaciones</string>
 
 </resources>

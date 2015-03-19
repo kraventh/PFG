@@ -15,6 +15,7 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
     <item
         android:id="@+id/menu_connect_scan_bt"
         android:icon="@drawable/ic_action_action_settings_bluetooth"
@@ -28,6 +29,14 @@
         android:title="@string/action_settings"/>
     <item
         android:id="@+id/menu_act_notificaciones"
-        android:title="N" />
+        android:showAsAction="ifRoom"
+        android:title="Activar notificaciones" />
+    <item
+        android:id="@+id/menu_lista_notificaciones"
+        android:title="Listar notificaciones"
+        />
+    <item
+        android:id="@+id/menu_limpiar_notificaciones"
+        android:title="Limpiar notificaciones" />
 
 </menu>

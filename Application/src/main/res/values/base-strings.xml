@@ -20,9 +20,10 @@
         <![CDATA[
         
             
-            Ya veremos si funciona esto...
+            Aquí se muestran las últimas notificaciones
             
         
         ]]>
     </string>
+    <string name="mensaje_bienvenida">Estado actual:</string>
 </resources>

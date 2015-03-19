@@ -1,17 +1,12 @@
 package es.dlacalle.pfg;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 
 /**
@@ -25,9 +20,6 @@ import android.widget.TextView;
 public class NotificacionesFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
-
-    private NotificationReceiver nReceiver;
-    private TextView textView;
 
     /**
      * Use this factory method to create a new instance of
@@ -49,23 +41,18 @@ public class NotificacionesFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        nReceiver = new NotificationReceiver();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("es.dlacalle.motonotify.NOTIFICATION_LISTENER_EXAMPLE");
-        getActivity().registerReceiver(nReceiver,filter);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_notificaciones, container, false);
-        textView = (TextView) view.findViewById(R.id.principal_textview);
 
-        return view;
+
+        return inflater.inflate(R.layout.fragment_notificaciones, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -87,7 +74,6 @@ public class NotificacionesFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        getActivity().unregisterReceiver(nReceiver);
 
     }
 
@@ -105,13 +91,5 @@ public class NotificacionesFragment extends Fragment {
         public void onFragmentInteraction(Uri uri);
     }
 
-    class NotificationReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String temp = intent.getStringExtra("notification_event") + "\n" + textView.getText();
-            textView.setText(temp);
-        }
-    }
 
 }

@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,23 +29,11 @@ public class ConfigFragment extends Fragment implements AbsListView.OnItemClickL
     private OnFragmentInteractionListener mListener;
 
     /**
-     * The fragment's ListView/GridView.
-     */
-    private AbsListView mListView;
-
-    /**
      * The Adapter which will be used to populate the ListView/GridView with
      * Views.
      */
     private MiArrayAdapter mAdapter;
 
-
-    public static ConfigFragment newInstance() {
-        ConfigFragment fragment = new ConfigFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -67,6 +55,9 @@ public class ConfigFragment extends Fragment implements AbsListView.OnItemClickL
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
+
         List<FilaAppList> aplicaciones = new ArrayList<>();
         PackageManager pm = getActivity().getPackageManager();
         List<ApplicationInfo> paquetes = pm.getInstalledApplications(PackageManager.GET_META_DATA);
@@ -82,7 +73,9 @@ public class ConfigFragment extends Fragment implements AbsListView.OnItemClickL
            }
            mAdapter = new MiArrayAdapter(this.getActivity(), aplicaciones);
 
-    }
+           //addPreferencesFromResource(R.xml.preferencias);
+
+       }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -90,7 +83,10 @@ public class ConfigFragment extends Fragment implements AbsListView.OnItemClickL
         View view = inflater.inflate(R.layout.fragment_config, container, false);
 
         // Set the adapter
-        mListView = (AbsListView) view.findViewById(android.R.id.list);
+        /*
+      The fragment's ListView/GridView.
+     */
+        AbsListView mListView = (AbsListView) view.findViewById(android.R.id.list);
         ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
 
         // Set OnItemClickListener so we can be notified on item clicks
@@ -124,10 +120,12 @@ public class ConfigFragment extends Fragment implements AbsListView.OnItemClickL
             // fragment is attached to one) that an item has been selected.
             //mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
         }
+
         if(this.mAdapter.getItem(position).getSeleccionado())
             this.mAdapter.getItem(position).setSeleccionado(false);
         else this.mAdapter.getItem(position).setSeleccionado(true);
         this.mAdapter.notifyDataSetChanged();
+
     }
 
     /**

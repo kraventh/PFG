@@ -17,7 +17,7 @@ public class ServicioNotificaciones extends NotificationListenerService {
         super.onCreate();
         nlservicereciver = new NLServiceReceiver();
         IntentFilter filter = new IntentFilter();
-        filter.addAction("es.dlacalle.motonotify.NOTIFICATION_LISTENER_SERVICE_EXAMPLE");
+        filter.addAction("es.dlacalle.pfg.servicios.NOTIFICATION_LISTENER_SERVICE_EXAMPLE");
         registerReceiver(nlservicereciver,filter);
     }
 
@@ -30,7 +30,7 @@ public class ServicioNotificaciones extends NotificationListenerService {
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
 
-        Intent i = new  Intent("es.dlacalle.motonotify.NOTIFICATION_LISTENER_EXAMPLE");
+        Intent i = new  Intent("es.dlacalle.pfg.servicios.NOTIFICATION_LISTENER_EXAMPLE");
         Bundle extras = sbn.getNotification().extras;
         String title = extras.getString("android.title");
         String text="";
@@ -56,7 +56,7 @@ public class ServicioNotificaciones extends NotificationListenerService {
 
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
-        Intent i = new  Intent("es.dlacalle.motonotify.NOTIFICATION_LISTENER_EXAMPLE");
+        Intent i = new  Intent("es.dlacalle.pfg.servicios.NOTIFICATION_LISTENER_EXAMPLE");
         i.putExtra("notification_event","onNotificationRemoved :" + sbn.getPackageName() + "\n");
 
         sendBroadcast(i);
@@ -70,20 +70,20 @@ public class ServicioNotificaciones extends NotificationListenerService {
                 ServicioNotificaciones.this.cancelAllNotifications();
             }
             else if(intent.getStringExtra("command").equals("list")){
-                Intent i1 = new  Intent("es.dlacalle.motonotify.NOTIFICATION_LISTENER_EXAMPLE");
+                Intent i1 = new  Intent("es.dlacalle.pfg.servicios.NOTIFICATION_LISTENER_EXAMPLE");
                 i1.putExtra("notification_event","========================");
                 sendBroadcast(i1);
                 int i=1;
                 for (StatusBarNotification sbn : ServicioNotificaciones.this.getActiveNotifications()) {
-                    Intent i2 = new  Intent("es.dlacalle.motonotify.NOTIFICATION_LISTENER_EXAMPLE");
-                    //i2.putExtra("notification_event", i + sbn.toString());
+                    Intent i2 = new  Intent("es.dlacalle.pfg.servicios.NOTIFICATION_LISTENER_EXAMPLE");
+
                     Bundle extras = sbn.getNotification().extras;
                     String title = extras.getString(Notification.EXTRA_TITLE);
                     String text="";
                     CharSequence[] multiline;
                     if(extras.getCharSequence(Notification.EXTRA_TEXT)==null) {
                         multiline = extras.getCharSequenceArray(Notification.EXTRA_TEXT_LINES);
-                        //text = (String) extras.getCharSequence("android.textLines");//.toString();
+
                         for(CharSequence line: multiline ){
                             text+=line.toString()+"\n";
                         }
@@ -101,7 +101,7 @@ public class ServicioNotificaciones extends NotificationListenerService {
                     sendBroadcast(i2);
                     i++;
                 }
-                Intent i3 = new  Intent("es.dlacalle.motonotify.NOTIFICATION_LISTENER_EXAMPLE");
+                Intent i3 = new  Intent("es.dlacalle.pfg.servicios.NOTIFICATION_LISTENER_EXAMPLE");
                 i3.putExtra("notification_event","===== Notification List ====");
                 sendBroadcast(i3);
 
