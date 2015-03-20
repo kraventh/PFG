@@ -25,13 +25,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
-import es.dlacalle.common.logger.Log;
-import es.dlacalle.pfg.Constants;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
+
+import es.dlacalle.common.logger.Log;
+import es.dlacalle.pfg.Constants;
 
 /**
  * This class does all the work for setting up and managing Bluetooth

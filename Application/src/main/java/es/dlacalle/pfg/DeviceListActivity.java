@@ -32,9 +32,9 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import es.dlacalle.common.logger.Log;
-
 import java.util.Set;
+
+import es.dlacalle.common.logger.Log;
 
 /**
  * This Activity appears as a dialog. It lists any paired devices and
