@@ -2,39 +2,39 @@
 <items version="2" >
 
     <item
-        jar="C:\Users\Pedro\AndroidStudioProjects\PFG\Application\build\intermediates\exploded-aar\com.android.support\cardview-v7\21.0.3\classes.jar"
-        jumboMode="false"
-        revision="21.1.1"
-        sha1="00b0b7233e1ec64acebfac40d4983d32d4712426">
-        <dex dex="C:\Users\Pedro\AndroidStudioProjects\PFG\Application\build\intermediates\pre-dexed\debug\classes-49223fe441da428c5cf40c55276179e78dc3ce44.jar" />
-    </item>
-    <item
-        jar="C:\Users\Pedro\AndroidStudioProjects\PFG\Application\build\intermediates\exploded-aar\com.android.support\gridlayout-v7\21.0.3\classes.jar"
+        jar="/Users/Pedro/AndroidStudioProjects/PFG/Application/build/intermediates/exploded-aar/com.android.support/gridlayout-v7/21.0.3/classes.jar"
         jumboMode="false"
         revision="21.1.1"
         sha1="2e8c06a7aad26ba8d2d5cab8134556594fe36856">
-        <dex dex="C:\Users\Pedro\AndroidStudioProjects\PFG\Application\build\intermediates\pre-dexed\debug\classes-f0d26fba6aee5abfde7aaf3adc98e9b87662753d.jar" />
+        <dex dex="/Users/Pedro/AndroidStudioProjects/PFG/Application/build/intermediates/pre-dexed/debug/classes-eae2515e2f0de5edc9ad164c1bb14efced652fc3.jar" />
     </item>
     <item
-        jar="C:\Users\Pedro\AndroidStudioProjects\PFG\Application\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\classes.jar"
-        jumboMode="false"
-        revision="21.1.1"
-        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
-        <dex dex="C:\Users\Pedro\AndroidStudioProjects\PFG\Application\build\intermediates\pre-dexed\debug\classes-668fcaff050134771c4751553f59367192847de7.jar" />
-    </item>
-    <item
-        jar="C:\Users\Pedro\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\21.0.3\support-annotations-21.0.3.jar"
-        jumboMode="false"
-        revision="21.1.1"
-        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
-        <dex dex="C:\Users\Pedro\AndroidStudioProjects\PFG\Application\build\intermediates\pre-dexed\debug\support-annotations-21.0.3-f40af08601c03ad5bf24ac0b138e2e10bb81d86b.jar" />
-    </item>
-    <item
-        jar="C:\Users\Pedro\AndroidStudioProjects\PFG\Application\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\libs\internal_impl-21.0.3.jar"
+        jar="/Users/Pedro/AndroidStudioProjects/PFG/Application/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/libs/internal_impl-21.0.3.jar"
         jumboMode="false"
         revision="21.1.1"
         sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
-        <dex dex="C:\Users\Pedro\AndroidStudioProjects\PFG\Application\build\intermediates\pre-dexed\debug\internal_impl-21.0.3-0ffa917c5102ada8a532ac2979d21d55a02856dd.jar" />
+        <dex dex="/Users/Pedro/AndroidStudioProjects/PFG/Application/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-a3e5daec9685b7d927b80140dbec9343abb8c10e.jar" />
+    </item>
+    <item
+        jar="/Users/Pedro/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/21.0.3/support-annotations-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
+        <dex dex="/Users/Pedro/AndroidStudioProjects/PFG/Application/build/intermediates/pre-dexed/debug/support-annotations-21.0.3-7d3bcd79ba17f0e5589ecfd06e4fc45416725291.jar" />
+    </item>
+    <item
+        jar="/Users/Pedro/AndroidStudioProjects/PFG/Application/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.3/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
+        <dex dex="/Users/Pedro/AndroidStudioProjects/PFG/Application/build/intermediates/pre-dexed/debug/classes-c649a60990757878ae474828ff33addee544002b.jar" />
+    </item>
+    <item
+        jar="/Users/Pedro/AndroidStudioProjects/PFG/Application/build/intermediates/exploded-aar/com.android.support/cardview-v7/21.0.3/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="00b0b7233e1ec64acebfac40d4983d32d4712426">
+        <dex dex="/Users/Pedro/AndroidStudioProjects/PFG/Application/build/intermediates/pre-dexed/debug/classes-8b2788d728f9caab7e227b891ca5802b2c02a0ac.jar" />
     </item>
 
 </items>

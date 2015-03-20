@@ -32,10 +32,10 @@
         android:title="Aplicación Monitorizada"
         >
         <CheckBoxPreference
-            android:key="habilitar_bluetooth"
-            android:icon="@drawable/ic_action_action_settings_bluetooth_conn"
-            android:defaultValue="true"
-            android:title="Activa/Desactiva Bluetooth"
-            android:summary="Activado" />
+            android:key="app_monitorizada"
+            android:icon="@drawable/ic_launcher"
+            android:defaultValue="false"
+            android:title="Ninguna"
+            android:summary="No hay aplicación seleccionada" />
         </PreferenceCategory>
 </PreferenceScreen>

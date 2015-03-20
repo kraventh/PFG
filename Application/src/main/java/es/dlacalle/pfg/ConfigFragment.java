@@ -1,10 +1,16 @@
 package es.dlacalle.pfg;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.preference.CheckBoxPreference;
+import android.preference.Preference;
+import android.preference.PreferenceFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -133,9 +139,16 @@ public class ConfigFragment extends Fragment implements AbsListView.OnItemClickL
             //mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
         }
 
-        if (this.mAdapter.getItem(position).getSeleccionado())
+
+        if (this.mAdapter.getItem(position).getSeleccionado()) {
             this.mAdapter.getItem(position).setSeleccionado(false);
-        else this.mAdapter.getItem(position).setSeleccionado(true);
+
+
+        }
+        else {
+            this.mAdapter.getItem(position).setSeleccionado(true);
+
+        }
         this.mAdapter.notifyDataSetChanged();
 
     }
@@ -150,6 +163,7 @@ public class ConfigFragment extends Fragment implements AbsListView.OnItemClickL
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
+
     public interface OnFragmentInteractionListener {
         public void onFragmentInteraction(String id);
     }
