@@ -1,6 +1,0 @@
-/Users/Pedro/AndroidStudioProjects/PFG/Application/build/intermediates/classes/debug
-/Users/Pedro/AndroidStudioProjects/PFG/Application/build/intermediates/pre-dexed/debug/support-annotations-21.0.3-7d3bcd79ba17f0e5589ecfd06e4fc45416725291.jar
-/Users/Pedro/AndroidStudioProjects/PFG/Application/build/intermediates/pre-dexed/debug/classes-8b2788d728f9caab7e227b891ca5802b2c02a0ac.jar
-/Users/Pedro/AndroidStudioProjects/PFG/Application/build/intermediates/pre-dexed/debug/classes-eae2515e2f0de5edc9ad164c1bb14efced652fc3.jar
-/Users/Pedro/AndroidStudioProjects/PFG/Application/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-a3e5daec9685b7d927b80140dbec9343abb8c10e.jar
-/Users/Pedro/AndroidStudioProjects/PFG/Application/build/intermediates/pre-dexed/debug/classes-c649a60990757878ae474828ff33addee544002b.jar
