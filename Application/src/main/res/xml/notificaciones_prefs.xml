@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="Permisos">
+
+        <PreferenceScreen
+            android:title="Acceso a las notificaciones"
+            android:summary="Permite activar/desactivar el acceso">
+
+            <intent android:action="android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"/>
+
+        </PreferenceScreen>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Notificaciones">
+        <CheckBoxPreference
+            android:key="habilitar_historico_notificaciones"
+            android:defaultValue="true"
+            android:title="Histórico de notificaciones"
+            android:summary="Habilitado por defecto" />
+
+        <CheckBoxPreference
+            android:key="limpiar_historico_notif"
+            android:defaultValue="false"
+            android:dependency="habilitar_historico_notificaciones"
+            android:title="Caché de notificaciones"
+            android:summary="Pulsa para vaciar" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Aplicación Monitorizada"
+        >
+        <CheckBoxPreference
+            android:key="habilitar_bluetooth"
+            android:icon="@drawable/ic_action_action_settings_bluetooth_conn"
+            android:defaultValue="true"
+            android:title="Activa/Desactiva Bluetooth"
+            android:summary="Activado" />
+        </PreferenceCategory>
+</PreferenceScreen>

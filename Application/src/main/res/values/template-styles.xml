@@ -22,7 +22,18 @@
 
     <style name="Theme.Sample" parent="Theme.Base" />
 
-    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar" />
+    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar" >
+
+        <!-- <item name="android:actionButtonStyle">@style/ActionButtonStyle</item> -->
+
+    </style>
+    <!--
+    <style name="ActionButtonStyle" parent="@android:style/Widget.Holo.Light.ActionButton">
+        <item name="android:minWidth">0dip</item>
+        <item name="android:paddingLeft">0dip</item>
+        <item name="android:paddingRight">0dip</item>
+    </style>
+    -->
     <!-- Widget styling -->
 
     <style name="Widget" />

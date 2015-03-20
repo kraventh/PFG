@@ -1,12 +1,13 @@
 package es.dlacalle.pfg;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.preference.CheckBoxPreference;
+import android.preference.PreferenceFragment;
+import android.widget.Toast;
 
 
 /**
@@ -17,7 +18,7 @@ import android.view.ViewGroup;
  * Use the {@link NotificacionesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NotificacionesFragment extends Fragment {
+public class NotificacionesFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private OnFragmentInteractionListener mListener;
 
@@ -41,9 +42,34 @@ public class NotificacionesFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        addPreferencesFromResource(R.xml.notificaciones_prefs);
     }
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        switch(key) {
+            case "limpiar_historico_notif":
+                CheckBoxPreference cb_lhn = (CheckBoxPreference) findPreference(key);
+                // Set summary to be the user-description for the selected value
+                if (cb_lhn.isChecked()) {
+                    ((MainActivity) getActivity()).textView.setText("");
+                    Toast.makeText(getActivity().getApplicationContext(), "Histórico eliminado", Toast.LENGTH_SHORT).show();
+                    cb_lhn.setChecked(false);
+                }
+                break;
+
+            case "habilitar_historico_notificaciones":
+                CheckBoxPreference cb_hhn = (CheckBoxPreference) findPreference(key);
+                // Set summary to be the user-description for the selected value
+                if (cb_hhn.isChecked()) ((MainActivity) getActivity()).textView.setText("");
+                else ((MainActivity) getActivity()).textView.setText("Histórico deshabilitado. Habilítelo en el menú \"Notificaciones\"");
+
+                break;
+        }
+
+
+    }
+/*
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -52,7 +78,7 @@ public class NotificacionesFragment extends Fragment {
 
         return inflater.inflate(R.layout.fragment_notificaciones, container, false);
     }
-
+*/
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -74,8 +100,21 @@ public class NotificacionesFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 
     }
+
+    @Override
+    public void onPause() {
+        getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+        super.onPause();
+    }
+
 
     /**
      * This interface must be implemented by activities that contain this

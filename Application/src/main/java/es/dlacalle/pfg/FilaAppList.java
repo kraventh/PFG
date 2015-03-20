@@ -11,7 +11,7 @@ public class FilaAppList {
     private int codigoVersion;
     private Boolean seleccionado;
 
-    public FilaAppList(){
+    public FilaAppList() {
         this.seleccionado = false;
     }
 

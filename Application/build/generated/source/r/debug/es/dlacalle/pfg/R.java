@@ -276,18 +276,18 @@ containing a value of this type.
         public static final int ic_action_action_settings_bluetooth=0x7f020001;
         public static final int ic_action_action_settings_bluetooth_conn=0x7f020002;
         public static final int ic_action_device_access_bluetooth_searching=0x7f020003;
-        public static final int ic_launcher=0x7f020004;
-        public static final int tile=0x7f020005;
+        public static final int ic_action_home=0x7f020004;
+        public static final int ic_action_notification_w=0x7f020005;
+        public static final int ic_launcher=0x7f020006;
+        public static final int tile=0x7f020007;
     }
     public static final class id {
         public static final int alignBounds=0x7f0b0002;
         public static final int alignMargins=0x7f0b0003;
-        public static final int app_row_checkbox=0x7f0b001c;
-        public static final int app_row_icon=0x7f0b001d;
-        public static final int app_row_label=0x7f0b001e;
-        public static final int app_row_pkglabel=0x7f0b001f;
-        public static final int boton_guarda_prefs=0x7f0b0021;
-        public static final int boton_permitir_servicio=0x7f0b0020;
+        public static final int ar_checkbox=0x7f0b001f;
+        public static final int ar_description=0x7f0b001e;
+        public static final int ar_icon=0x7f0b001c;
+        public static final int ar_title=0x7f0b001d;
         public static final int bottom=0x7f0b0004;
         public static final int button_scan=0x7f0b0016;
         public static final int center=0x7f0b0005;
@@ -300,14 +300,12 @@ containing a value of this type.
         public static final int fill_horizontal=0x7f0b000c;
         public static final int fill_vertical=0x7f0b000d;
         public static final int horizontal=0x7f0b0000;
-        public static final int imageView=0x7f0b002a;
+        public static final int imageView=0x7f0b0028;
         public static final int left=0x7f0b000e;
         public static final int log_fragment=0x7f0b001a;
-        public static final int menu_act_notificaciones=0x7f0b002d;
-        public static final int menu_connect_scan_bt=0x7f0b002b;
-        public static final int menu_limpiar_notificaciones=0x7f0b002f;
-        public static final int menu_lista_notificaciones=0x7f0b002e;
-        public static final int menu_settings=0x7f0b002c;
+        public static final int menu_act_notificaciones=0x7f0b002b;
+        public static final int menu_connect_scan_bt=0x7f0b0029;
+        public static final int menu_settings=0x7f0b002a;
         public static final int new_devices=0x7f0b0015;
         public static final int paired_devices=0x7f0b0013;
         public static final int principal_textview=0x7f0b0019;
@@ -316,14 +314,14 @@ containing a value of this type.
         public static final int sample_main_layout=0x7f0b0017;
         public static final int sample_output=0x7f0b0018;
         public static final int start=0x7f0b0010;
-        public static final int textView=0x7f0b0022;
-        public static final int textView2=0x7f0b0024;
-        public static final int textView3=0x7f0b0026;
-        public static final int textView4=0x7f0b0028;
-        public static final int textView5=0x7f0b0023;
-        public static final int textView6=0x7f0b0025;
-        public static final int textView7=0x7f0b0027;
-        public static final int textView8=0x7f0b0029;
+        public static final int textView=0x7f0b0020;
+        public static final int textView2=0x7f0b0022;
+        public static final int textView3=0x7f0b0024;
+        public static final int textView4=0x7f0b0026;
+        public static final int textView5=0x7f0b0021;
+        public static final int textView6=0x7f0b0023;
+        public static final int textView7=0x7f0b0025;
+        public static final int textView8=0x7f0b0027;
         public static final int title_new_devices=0x7f0b0014;
         public static final int title_paired_devices=0x7f0b0012;
         public static final int top=0x7f0b0011;
@@ -371,6 +369,8 @@ containing a value of this type.
         public static final int ultimas_notificaciones=0x7f080017;
     }
     public static final class style {
+        /**  <item name="android:actionButtonStyle">@style/ActionButtonStyle</item> 
+         */
         public static final int AppTheme=0x7f090000;
         public static final int CardView=0x7f090001;
         public static final int CardView_Dark=0x7f090002;
@@ -382,7 +382,8 @@ containing a value of this type.
         public static final int Widget_SampleMessageTile=0x7f090008;
     }
     public static final class xml {
-        public static final int preferencias=0x7f040000;
+        public static final int notificaciones_prefs=0x7f040000;
+        public static final int preferencias=0x7f040001;
     }
     public static final class styleable {
         /** Attributes that can be used with a CardView.

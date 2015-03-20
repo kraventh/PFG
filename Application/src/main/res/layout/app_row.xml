@@ -1,50 +1,59 @@
-<?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:descendantFocusability="blocksDescendants">
-
-    <CheckBox
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="5dp"
-        android:id="@+id/app_row_checkbox"/>
+    android:minHeight="?android:attr/listPreferredItemHeight"
+    android:gravity="center_vertical"
+    android:paddingEnd="?android:attr/scrollbarSize"
+    android:background="?android:attr/selectableItemBackground" >
 
     <ImageView
-        android:id="@+id/app_row_icon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp"
-        android:src="@drawable/ic_launcher"
-        android:contentDescription="@string/text_app_icon"/>
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
+        android:id="@+id/ar_icon"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
-        <TextView
-            android:id="@+id/app_row_label"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="@string/Linea"
-            android:textSize="20sp"
-            />
-        <TextView
-            android:id="@+id/app_row_pkglabel"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/Linea"
-            android:textSize="12sp"
-            />
+        android:layout_gravity="center"
+        />
 
-    </LinearLayout>
-    -->
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dip"
+        android:layout_marginEnd="6dip"
+        android:layout_marginTop="6dip"
+        android:layout_marginBottom="6dip"
+        android:layout_weight="1">
+
+        <TextView android:id="@+id/ar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:ellipsize="marquee"
+            android:fadingEdge="horizontal" />
+
+        <TextView android:id="@+id/ar_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ar_title"
+            android:layout_alignStart="@+id/ar_title"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="?android:attr/textColorSecondary"
+            android:maxLines="4" />
+
+    </RelativeLayout>
+
+    <!-- Preference should place its actual preference widget here. -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="vertical" >
+        <CheckBox
+            android:id="@+id/ar_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:focusable="false"
+            android:clickable="false" />
+        </LinearLayout>
 
 </LinearLayout>

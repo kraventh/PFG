@@ -25,7 +25,6 @@ import android.os.Bundle;
 import android.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.TextView;
 
 import es.dlacalle.common.activities.SampleActivityBase;
@@ -37,26 +36,22 @@ import es.dlacalle.common.logger.MessageOnlyLogFilter;
 /**
  * A simple launcher activity containing a summary sample description, sample log and a custom
  * {@link android.support.v4.app.Fragment} which can display a view.
- * <p>
+ * <p/>
  * For devices with displays with a width of 720dp or greater, the sample log is always visible,
  * on other devices it's visibility is controlled by an item on the Action Bar.
  */
 
 //ToDo implementar sharedpreferences
 public class MainActivity extends SampleActivityBase
-    implements ConfigFragment.OnFragmentInteractionListener,
+        implements ConfigFragment.OnFragmentInteractionListener,
         NotificacionesFragment.OnFragmentInteractionListener {
 
     public static final String TAG = "MainActivity";
-
-    private NotificationReceiver nReceiver;
-    private TextView textView;
-
     PFGFragment pfgFragment;
     ConfigFragment configFragment;
     NotificacionesFragment notifiFragment;
-
-
+    private NotificationReceiver nReceiver;
+    public TextView textView;
 
 
     // Whether the Log Fragment is currently shown
@@ -68,8 +63,8 @@ public class MainActivity extends SampleActivityBase
         setContentView(R.layout.activity_main);
 
         pfgFragment = new PFGFragment();
-        configFragment = new ConfigFragment();
-        notifiFragment = new NotificacionesFragment();
+        configFragment = ConfigFragment.newInstance();
+        notifiFragment = NotificacionesFragment.newInstance();
 
         nReceiver = new NotificationReceiver();
         IntentFilter filter = new IntentFilter();
@@ -102,7 +97,6 @@ public class MainActivity extends SampleActivityBase
     }
 
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
@@ -119,15 +113,19 @@ public class MainActivity extends SampleActivityBase
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_connect_scan_bt: {
+                // Launch the DeviceListActivity to see devices and do scan
+/*                Intent serverIntent = new Intent(this, DeviceListActivity.class);
+                startActivityForResult(serverIntent, Constants.REQUEST_CONNECT_DEVICE_SECURE);
+                return true;*/
+                pfgFragment.onOptionsItemSelected(item);
+            //}
+            //case R.id.menu_home: {
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.sample_content_fragment, pfgFragment);
                 transaction.addToBackStack(null);
+                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                 transaction.commit();
-                pfgFragment.onOptionsItemSelected(item);
-                // Launch the DeviceListActivity to see devices and do scan
-                /*Intent serverIntent = new Intent(this, DeviceListActivity.class);
-                startActivityForResult(serverIntent, Constants.REQUEST_CONNECT_DEVICE_SECURE);
-                return true;*/
+                break;
             }
             case R.id.menu_settings: {
                 //Cambia al ConfigFragment para seleccionar la aplicación
@@ -135,6 +133,7 @@ public class MainActivity extends SampleActivityBase
 
                 transaction.replace(R.id.sample_content_fragment, configFragment);
                 transaction.addToBackStack(null);
+                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                 transaction.commit();
                 break;
             }
@@ -145,35 +144,23 @@ public class MainActivity extends SampleActivityBase
 
                 transaction.replace(R.id.sample_content_fragment, notifiFragment);
                 transaction.addToBackStack(null);
+
+                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                 transaction.commit();
                 break;
             }
-            case R.id.menu_lista_notificaciones:{
-                Intent i = new Intent("es.dlacalle.pfg.servicios.NOTIFICATION_LISTENER_SERVICE_EXAMPLE");
-                i.putExtra("command","list");
-                sendBroadcast(i);
-                break;
-            }
-            case R.id.menu_limpiar_notificaciones:
-                textView.setText("");
-                break;
+
         }
         return super.onOptionsItemSelected(item);
     }
+/*
+    public void onButtonClick(View view) {
 
-    public void onButtonClick(View view){
-        switch(view.getId()){
-            case R.id.boton_permitir_servicio:
-                Intent intent=new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
-                startActivity(intent);
-                break;
-            case R.id.boton_guarda_prefs:
-                getFragmentManager().popBackStack();
-                break;
-        }
     }
-
-    /** Create a chain of targets that will receive log data */
+*/
+    /**
+     * Create a chain of targets that will receive log data
+     */
     @Override
     public void initializeLogging() {
         // Wraps Android's native log framework.
@@ -193,10 +180,11 @@ public class MainActivity extends SampleActivityBase
         Log.i(TAG, "Ready");
     }
 
-        public void onFragmentInteraction(String id){
-            //nothing by now
-        }
-    public void onFragmentInteraction(Uri uri){
+    public void onFragmentInteraction(String id) {
+        //nothing by now
+    }
+
+    public void onFragmentInteraction(Uri uri) {
 
     }
 

@@ -34,6 +34,19 @@ public class ConfigFragment extends Fragment implements AbsListView.OnItemClickL
      */
     private MiArrayAdapter mAdapter;
 
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @return A new instance of fragment ConfigFragment.
+     */
+    public static ConfigFragment newInstance() {
+        ConfigFragment fragment = new ConfigFragment();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -41,6 +54,7 @@ public class ConfigFragment extends Fragment implements AbsListView.OnItemClickL
      */
     public ConfigFragment() {
     }
+
     /* Pasos para crear mi propio ArrayAdapter a fin de utilizar un ListView personalizado
             * 1. Crear la clase que guardará los objetos, con sus propiedades, getters y setters.(Ver FilaAppList)
             * 2. Crear la clase MiArrayAdapter que extiende ArrayAdapter<FilaAppList>
@@ -51,31 +65,29 @@ public class ConfigFragment extends Fragment implements AbsListView.OnItemClickL
             *   porque la Activity es de tipo ListActivity, si fuera tipo Activity habría que crear
             *   el ListView, asociarlo con su elemento del Layout y utilizar el método setAdapter. */
 
-       @Override
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
 
 
         List<FilaAppList> aplicaciones = new ArrayList<>();
         PackageManager pm = getActivity().getPackageManager();
         List<ApplicationInfo> paquetes = pm.getInstalledApplications(PackageManager.GET_META_DATA);
-           for(ApplicationInfo infoPaquete : paquetes){
-               FilaAppList app = new FilaAppList();
-               app.setNombreApp(infoPaquete.loadLabel(getActivity().getPackageManager()).toString());
-               //Restringimos a Whatsapp y Maps
-               if(app.getNombreApp().equals("WhatsApp") || app.getNombreApp().equals("Maps")) {
-                   app.setIcon(infoPaquete.loadIcon(getActivity().getPackageManager()));
-                   app.setNombrePaquete(infoPaquete.packageName);
-                   aplicaciones.add(app);
-               }
-           }
-           mAdapter = new MiArrayAdapter(this.getActivity(), aplicaciones);
+        for (ApplicationInfo infoPaquete : paquetes) {
+            FilaAppList app = new FilaAppList();
+            app.setNombreApp(infoPaquete.loadLabel(getActivity().getPackageManager()).toString());
+            //Restringimos a Whatsapp y Maps
+            if (app.getNombreApp().equals("WhatsApp") || app.getNombreApp().equals("Maps")) {
+                app.setIcon(infoPaquete.loadIcon(getActivity().getPackageManager()));
+                app.setNombrePaquete(infoPaquete.packageName);
+                aplicaciones.add(app);
+            }
+        }
+        mAdapter = new MiArrayAdapter(this.getActivity(), aplicaciones);
 
-           //addPreferencesFromResource(R.xml.preferencias);
+        //addPreferencesFromResource(R.xml.preferencias);
 
-       }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -121,7 +133,7 @@ public class ConfigFragment extends Fragment implements AbsListView.OnItemClickL
             //mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
         }
 
-        if(this.mAdapter.getItem(position).getSeleccionado())
+        if (this.mAdapter.getItem(position).getSeleccionado())
             this.mAdapter.getItem(position).setSeleccionado(false);
         else this.mAdapter.getItem(position).setSeleccionado(true);
         this.mAdapter.notifyDataSetChanged();
@@ -141,7 +153,6 @@ public class ConfigFragment extends Fragment implements AbsListView.OnItemClickL
     public interface OnFragmentInteractionListener {
         public void onFragmentInteraction(String id);
     }
-
 
 
 }

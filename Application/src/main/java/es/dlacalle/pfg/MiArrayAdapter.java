@@ -22,14 +22,14 @@ public class MiArrayAdapter extends ArrayAdapter<FilaAppList> {
      * @param context: el contexto de nuestra aplicación en el que se crea el ArrayAdapter
      * @param aplicaciones: lista de FilaAppList que contiene los datos para rellenar el ArrayAdapter
      */
-    public MiArrayAdapter(Context context, List<FilaAppList> aplicaciones){
+    public MiArrayAdapter(Context context, List<FilaAppList> aplicaciones) {
         /* Lo primero es llamar al constructor del ArrayAdapter pasandole el contexto
          * el layout que utilizará y los datos para rellenar
          */
         super(context, R.layout.app_row, aplicaciones);
         /* y nos guardamos el contexto y la lista de objetos para rellenar */
-        this.context=context;
-        this.aplicaciones=aplicaciones;
+        this.context = context;
+        this.aplicaciones = aplicaciones;
         //inflater = activity.getWindow().getLayoutInflater();
 
     }
@@ -39,7 +39,7 @@ public class MiArrayAdapter extends ArrayAdapter<FilaAppList> {
      * momento.
      */
     @Override
-    public View getView(int position, View convertView, ViewGroup parent){
+    public View getView(int position, View convertView, ViewGroup parent) {
         /* Creamos el inflater */
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -51,10 +51,10 @@ public class MiArrayAdapter extends ArrayAdapter<FilaAppList> {
          * del layout
          */
 
-        TextView textView = (TextView) rowView.findViewById(R.id.app_row_label);
-        TextView textViewPkg = (TextView) rowView.findViewById(R.id.app_row_pkglabel);
-        ImageView imageView = (ImageView) rowView.findViewById(R.id.app_row_icon);
-        CheckBox checkbox = (CheckBox) rowView.findViewById(R.id.app_row_checkbox);
+        TextView textView = (TextView) rowView.findViewById(R.id.ar_title);
+        TextView textViewPkg = (TextView) rowView.findViewById(R.id.ar_description);
+        ImageView imageView = (ImageView) rowView.findViewById(R.id.ar_icon);
+        CheckBox checkbox = (CheckBox) rowView.findViewById(R.id.ar_checkbox);
 
         /* Asignamos los valores */
         textView.setText(aplicaciones.get(position).getNombreApp());
