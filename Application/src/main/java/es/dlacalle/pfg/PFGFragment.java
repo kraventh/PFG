@@ -22,9 +22,12 @@ import android.app.Fragment;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -32,6 +35,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import es.dlacalle.common.logger.Log;
@@ -44,7 +49,13 @@ public class PFGFragment extends Fragment {
 
     private static final String TAG = "PFGFragment";
 
-    // Layout Views
+    //Campos pfgFragment
+    TextView btStatus;
+    TextView btVisibleStatus;
+    TextView accesoNotif;
+    TextView pfgAppTitle;
+    TextView pfgAppPaquete;
+    ImageView pfgAppIcon;
 
     /**
      * Name of the connected device
@@ -170,7 +181,45 @@ public class PFGFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_pfg, container, false);
+        View v = inflater.inflate(R.layout.fragment_pfg, container, false);
+
+        //Campos pfgFragment
+        btStatus = (TextView) v.findViewById(R.id.pfg_bt_status);
+        btVisibleStatus = (TextView) v.findViewById(R.id.pfg_bt_visible_status);
+        accesoNotif = (TextView) v.findViewById(R.id.pfg_acceso_notif_status);
+        pfgAppTitle = (TextView) v.findViewById(R.id.pfg_app_title);
+        pfgAppPaquete = (TextView) v.findViewById(R.id.pfg_app_description);
+        pfgAppIcon = (ImageView) v.findViewById(R.id.pfg_app_icon);
+
+        getEstadoGeneral();
+
+        return v;
+    }
+
+    //Funciones propias
+    public void getEstadoGeneral() {
+
+        BluetoothAdapter mBtAdp = BluetoothAdapter.getDefaultAdapter();
+
+        if (mBtAdp.isEnabled()) {
+            btStatus.setText("Activado");
+        } else btStatus.setText("Desactivado");
+
+        if (mBtAdp.getScanMode() == BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE)
+            btVisibleStatus.setText("Si");
+        else btVisibleStatus.setText("No");
+
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+        pfgAppTitle.setText(pref.getString("app_monitorizada_titulo", "Ninguna"));
+        pfgAppPaquete.setText(pref.getString("app_monitorizada_paquete", "No hay aplicación seleccionada"));
+        try {
+            pfgAppIcon.setImageDrawable(getActivity().getPackageManager().
+                    getPackageInfo(pfgAppPaquete.getText().toString(), 0).
+                    applicationInfo.loadIcon(getActivity().getPackageManager()));
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**

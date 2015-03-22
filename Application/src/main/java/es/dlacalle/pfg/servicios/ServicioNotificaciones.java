@@ -50,6 +50,7 @@ public class ServicioNotificaciones extends NotificationListenerService {
 
         //i.putExtra("notification_event","onNotificationPosted :" + sbn.getPackageName() + "\n");
         i.putExtra("notification_event", title + ": " + text);
+        i.putExtra("notification_paquete", sbn.getPackageName());
         sendBroadcast(i);
 
     }
@@ -58,7 +59,7 @@ public class ServicioNotificaciones extends NotificationListenerService {
     public void onNotificationRemoved(StatusBarNotification sbn) {
         Intent i = new Intent("es.dlacalle.pfg.servicios.NOTIFICATION_LISTENER_EXAMPLE");
         i.putExtra("notification_event", "onNotificationRemoved :" + sbn.getPackageName() + "\n");
-
+        //i.putExtra("notification_paquete", sbn.getPackageName());
         sendBroadcast(i);
     }
 
@@ -71,6 +72,8 @@ public class ServicioNotificaciones extends NotificationListenerService {
             } else if (intent.getStringExtra("command").equals("list")) {
                 Intent i1 = new Intent("es.dlacalle.pfg.servicios.NOTIFICATION_LISTENER_EXAMPLE");
                 i1.putExtra("notification_event", "========================");
+                i1.putExtra("notification_paquete", "Separador");
+
                 sendBroadcast(i1);
                 int i = 1;
                 for (StatusBarNotification sbn : ServicioNotificaciones.this.getActiveNotifications()) {
@@ -95,12 +98,14 @@ public class ServicioNotificaciones extends NotificationListenerService {
                     i2.putExtra("notification_event", i + " - " +
                             title + ": " +
                             text + "");
+                    i2.putExtra("notification_paquete", sbn.getPackageName());
 
                     sendBroadcast(i2);
                     i++;
                 }
                 Intent i3 = new Intent("es.dlacalle.pfg.servicios.NOTIFICATION_LISTENER_EXAMPLE");
                 i3.putExtra("notification_event", "===== Notification List ====");
+                i3.putExtra("notification_paquete", "Separador");
                 sendBroadcast(i3);
 
             }

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,8 +69,6 @@ public class ConfigFragment extends Fragment implements AbsListView.OnItemClickL
             }
         }
         mAdapter = new MiArrayAdapter(this.getActivity(), aplicaciones);
-
-        //addPreferencesFromResource(R.xml.preferencias);
 
     }
 
@@ -161,9 +158,7 @@ public class ConfigFragment extends Fragment implements AbsListView.OnItemClickL
      */
 
     public interface ConfigFragmentListener {
-        public void ConfigFragmentInteraction(String nombre, String paquete, Drawable icono);
-
-        public void ConfigFragmentInteraction(String nombre, String paquete, int icono);
+        public void ConfigFragmentInteraction(String nombre, String paquete, Object icono);
 
     }
 

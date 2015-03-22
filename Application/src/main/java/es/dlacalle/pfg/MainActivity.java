@@ -22,15 +22,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-
-import java.util.Map;
 
 import es.dlacalle.common.activities.SampleActivityBase;
 import es.dlacalle.common.logger.Log;
@@ -46,25 +43,23 @@ import es.dlacalle.common.logger.MessageOnlyLogFilter;
  * on other devices it's visibility is controlled by an item on the Action Bar.
  */
 
-//ToDo implementar sharedpreferences
 public class MainActivity extends SampleActivityBase
         implements ConfigFragment.ConfigFragmentListener,
         NotificacionesFragment.NotificationFragmentListener {
 
     public static final String TAG = "MainActivity";
     public TextView textView;
-    SharedPreferences preferences;
+
     private PFGFragment pfgFragment;
     private ConfigFragment configFragment;
     private NotificacionesFragment notifiFragment;
+
     private NotificationReceiver nReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         pfgFragment = new PFGFragment();
         configFragment = new ConfigFragment();
@@ -88,14 +83,18 @@ public class MainActivity extends SampleActivityBase
 
             transaction.replace(R.id.sample_content_fragment, pfgFragment).commit();
 
+            //getEstadoGeneral();
+
+            /*SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             Map<String, ?> keys = preferences.getAll();
 
             for (Map.Entry<String, ?> entry : keys.entrySet()) {
                 textView.setText(textView.getText() + "\n" + entry.getKey() + ": " +
                         entry.getValue().toString());
-            }
+            }*/
 
         }
+
     }
 
     @Override
@@ -133,6 +132,7 @@ public class MainActivity extends SampleActivityBase
                 transaction.addToBackStack(null);
                 transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                 transaction.commit();
+                pfgFragment.getEstadoGeneral();
                 break;
             }
             case R.id.menu_settings: {
@@ -183,14 +183,13 @@ public class MainActivity extends SampleActivityBase
         Log.i(TAG, "Ready");
     }
 
+    //Interfaces
+
     //Interfaces con ConfigFragment
-    public void ConfigFragmentInteraction(String nombre, String paquete, Drawable icono) {
+    public void ConfigFragmentInteraction(String nombre, String paquete, Object icono) {
         notifiFragment.actualizaAppMonitorizada(nombre, paquete, icono);
     }
 
-    public void ConfigFragmentInteraction(String nombre, String paquete, int icono) {
-        notifiFragment.actualizaAppMonitorizada(nombre, paquete, icono);
-    }
 
     //Interfaces con NotificacionFragment
     public void onFragmentInteraction(Uri uri) {
@@ -201,8 +200,23 @@ public class MainActivity extends SampleActivityBase
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            String temp = intent.getStringExtra("notification_event") + "\n" + textView.getText();
-            textView.setText(temp);
+            String temp = "";
+            SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            //Obtengo el nombre del paquete cuyas notificaciones quiero atender
+            //"Ninguna" es el valor que devuelve por defecto si el campo estuviese vacío
+            String prefPackage = pref.getString("app_monitorizada_paquete", "Ninguna");
+            try {
+                String pkgName = intent.getStringExtra("notification_paquete");
+                temp = intent.getStringExtra("notification_event") + "\n" + textView.getText();
+
+                if (pkgName.equals(prefPackage)) {
+                    textView.setText(temp);
+                }
+            } catch (Exception e) {
+                textView.setText("Notificación desestimada: " + temp);
+            }
+
+
         }
     }
 

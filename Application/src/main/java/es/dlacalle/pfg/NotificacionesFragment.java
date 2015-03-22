@@ -3,12 +3,15 @@ package es.dlacalle.pfg;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceScreen;
 import android.widget.Toast;
 
 
@@ -17,14 +20,14 @@ import android.widget.Toast;
  * Activities that contain this fragment must implement the
  * {@link es.dlacalle.pfg.NotificacionesFragment.NotificationFragmentListener} interface
  * to handle interaction events.
- * Use the {@link NotificacionesFragment#newInstance} factory method to
+ * Use the {@link NotificacionesFragment} factory method to
  * create an instance of this fragment.
  */
 public class NotificacionesFragment extends PreferenceFragment
         implements SharedPreferences.OnSharedPreferenceChangeListener {
     private NotificationFragmentListener mListener;
 
-    private Preference app_monitorizada;
+    private PreferenceScreen app_monitorizada;
 
     public NotificacionesFragment() {
         // Required empty public constructor
@@ -46,6 +49,8 @@ public class NotificacionesFragment extends PreferenceFragment
                 return true;
             }
         });
+        //Actualizo la preferencia de la aplicación a monitorizar
+        compruebaAppMonitorizada();
     }
 
     @Override
@@ -74,19 +79,58 @@ public class NotificacionesFragment extends PreferenceFragment
             return inflater.inflate(R.layout.fragment_notificaciones, container, false);
         }
     */
-    public void actualizaAppMonitorizada(String nombre, String paquete, Drawable icono) {
-        app_monitorizada = findPreference("app_monitorizada");
-        app_monitorizada.setTitle(nombre);
-        app_monitorizada.setSummary(paquete);
-        app_monitorizada.setIcon(icono);
+
+    /**
+     * Comprueba las preferencias guardadas y cumplimenta la preferenceScreen con los
+     * datos de la aplicación seleccionada en una sesión anterior.
+     */
+    public void compruebaAppMonitorizada() {
+        Drawable icono = null;
+        //Nombre de la app
+        EditTextPreference titulo = (EditTextPreference) findPreference("app_monitorizada_titulo");
+        //Nombre del paquete
+        EditTextPreference paquete = (EditTextPreference) findPreference("app_monitorizada_paquete");
+
+        if (titulo.getText().equals("Ninguna")) {
+            titulo.setSummary(titulo.getText());
+            paquete.setSummary(paquete.getText());
+        } else {
+            try {
+                //Icono de la app
+                icono = getActivity().getPackageManager().
+                        getPackageInfo(paquete.getText(), 0).
+                        applicationInfo.loadIcon(getActivity().getPackageManager());
+            } catch (PackageManager.NameNotFoundException e) {
+                Toast.makeText(getActivity(),
+                        "Paquete '" + paquete.getText() + "' no encontrado",
+                        Toast.LENGTH_SHORT).show();
+            }
+            app_monitorizada = (PreferenceScreen) findPreference("app_monitorizada");
+            app_monitorizada.setTitle(titulo.getText());
+            app_monitorizada.setSummary(paquete.getText());
+            app_monitorizada.setIcon(icono);
+            titulo.setSummary(titulo.getText());
+            paquete.setSummary(paquete.getText());
+        }
 
     }
 
-    public void actualizaAppMonitorizada(String nombre, String paquete, int icono) {
-        app_monitorizada = findPreference("app_monitorizada");
+    public void actualizaAppMonitorizada(String nombre, String paquete, Object icono) {
+        EditTextPreference titulo = (EditTextPreference) findPreference("app_monitorizada_titulo");
+        EditTextPreference paqueText = (EditTextPreference) findPreference("app_monitorizada_paquete");
+
+        app_monitorizada = (PreferenceScreen) findPreference("app_monitorizada");
         app_monitorizada.setTitle(nombre);
+        titulo.setSummary(nombre);
+        titulo.setText(nombre);
         app_monitorizada.setSummary(paquete);
-        app_monitorizada.setIcon(icono);
+        paqueText.setSummary(paquete);
+        paqueText.setText(paquete);
+
+        if (icono.getClass().equals(Integer.class))
+            app_monitorizada.setIcon((int) icono);
+        else
+            app_monitorizada.setIcon((Drawable) icono);
 
     }
 
@@ -103,7 +147,7 @@ public class NotificacionesFragment extends PreferenceFragment
             mListener = (NotificationFragmentListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " debe implementar OnFragmentInteractionListener");
+                    + " debe implementar NotificationFragmentListener");
         }
     }
 

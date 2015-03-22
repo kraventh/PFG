@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory
-        android:title="Permisos">
+    <PreferenceCategory android:title="Permisos">
 
         <PreferenceScreen
             android:summary="Permite activar/desactivar el acceso"
@@ -13,8 +11,7 @@
 
         </PreferenceScreen>
     </PreferenceCategory>
-    <PreferenceCategory
-        android:title="Notificaciones">
+    <PreferenceCategory android:title="Notificaciones">
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="habilitar_historico_notificaciones"
@@ -29,11 +26,24 @@
 
     </PreferenceCategory>
     <PreferenceCategory android:title="Aplicación Monitorizada">
-        <Preference
+        <PreferenceScreen
             android:icon="@drawable/ic_launcher"
             android:key="app_monitorizada"
             android:summary="No hay aplicación seleccionada"
-            android:title="Ninguna" />
+            android:title="Ninguna">
+
+            <EditTextPreference
+                android:defaultValue="Ninguna"
+                android:editable="false"
+                android:key="app_monitorizada_titulo"
+                android:title="Título" />
+            <EditTextPreference
+                android:defaultValue="No hay aplicación seleccionada"
+                android:editable="false"
+                android:key="app_monitorizada_paquete"
+                android:title="Paquete" />
+
+        </PreferenceScreen>
 
     </PreferenceCategory>
 </PreferenceScreen>
