@@ -6,36 +6,34 @@
         android:title="Permisos">
 
         <PreferenceScreen
-            android:title="Acceso a las notificaciones"
-            android:summary="Permite activar/desactivar el acceso">
+            android:summary="Permite activar/desactivar el acceso"
+            android:title="Acceso a las notificaciones">
 
-            <intent android:action="android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"/>
+            <intent android:action="android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS" />
 
         </PreferenceScreen>
     </PreferenceCategory>
     <PreferenceCategory
         android:title="Notificaciones">
         <CheckBoxPreference
-            android:key="habilitar_historico_notificaciones"
             android:defaultValue="true"
-            android:title="Histórico de notificaciones"
-            android:summary="Habilitado por defecto" />
+            android:key="habilitar_historico_notificaciones"
+            android:summary="Habilitado por defecto"
+            android:title="Histórico de notificaciones" />
 
-        <CheckBoxPreference
-            android:key="limpiar_historico_notif"
-            android:defaultValue="false"
+        <Preference
             android:dependency="habilitar_historico_notificaciones"
-            android:title="Caché de notificaciones"
-            android:summary="Pulsa para vaciar" />
+            android:key="limpiar_historico_notif"
+            android:summary="Pulsa para vaciar"
+            android:title="Caché de notificaciones" />
+
     </PreferenceCategory>
-    <PreferenceCategory
-        android:title="Aplicación Monitorizada"
-        >
-        <CheckBoxPreference
-            android:key="app_monitorizada"
+    <PreferenceCategory android:title="Aplicación Monitorizada">
+        <Preference
             android:icon="@drawable/ic_launcher"
-            android:defaultValue="false"
-            android:title="Ninguna"
-            android:summary="No hay aplicación seleccionada" />
-        </PreferenceCategory>
+            android:key="app_monitorizada"
+            android:summary="No hay aplicación seleccionada"
+            android:title="Ninguna" />
+
+    </PreferenceCategory>
 </PreferenceScreen>

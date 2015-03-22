@@ -16,16 +16,21 @@
 
 package es.dlacalle.pfg;
 
+import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.FragmentTransaction;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import java.util.Map;
 
 import es.dlacalle.common.activities.SampleActivityBase;
 import es.dlacalle.common.logger.Log;
@@ -43,28 +48,27 @@ import es.dlacalle.common.logger.MessageOnlyLogFilter;
 
 //ToDo implementar sharedpreferences
 public class MainActivity extends SampleActivityBase
-        implements ConfigFragment.OnFragmentInteractionListener,
-        NotificacionesFragment.OnFragmentInteractionListener {
+        implements ConfigFragment.ConfigFragmentListener,
+        NotificacionesFragment.NotificationFragmentListener {
 
     public static final String TAG = "MainActivity";
-    PFGFragment pfgFragment;
-    ConfigFragment configFragment;
-    NotificacionesFragment notifiFragment;
-    private NotificationReceiver nReceiver;
     public TextView textView;
-
-
-    // Whether the Log Fragment is currently shown
-    //private boolean mLogShown;
+    SharedPreferences preferences;
+    private PFGFragment pfgFragment;
+    private ConfigFragment configFragment;
+    private NotificacionesFragment notifiFragment;
+    private NotificationReceiver nReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
         pfgFragment = new PFGFragment();
-        configFragment = ConfigFragment.newInstance();
-        notifiFragment = NotificacionesFragment.newInstance();
+        configFragment = new ConfigFragment();
+        notifiFragment = new NotificacionesFragment();
 
         nReceiver = new NotificationReceiver();
         IntentFilter filter = new IntentFilter();
@@ -81,11 +85,15 @@ public class MainActivity extends SampleActivityBase
             // Add the fragment to the 'fragment_container' FrameLayout
             // Replace whatever is in the fragment_container view with this fragment,
             // and add the transaction to the back stack so the user can navigate back
-            transaction.replace(R.id.sample_content_fragment, pfgFragment);
-            transaction.addToBackStack(null);
 
-            // Commit the transaction
-            transaction.commit();
+            transaction.replace(R.id.sample_content_fragment, pfgFragment).commit();
+
+            Map<String, ?> keys = preferences.getAll();
+
+            for (Map.Entry<String, ?> entry : keys.entrySet()) {
+                textView.setText(textView.getText() + "\n" + entry.getKey() + ": " +
+                        entry.getValue().toString());
+            }
 
         }
     }
@@ -118,8 +126,8 @@ public class MainActivity extends SampleActivityBase
                 startActivityForResult(serverIntent, Constants.REQUEST_CONNECT_DEVICE_SECURE);
                 return true;*/
                 pfgFragment.onOptionsItemSelected(item);
-            //}
-            //case R.id.menu_home: {
+                //}
+                //case R.id.menu_home: {
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.sample_content_fragment, pfgFragment);
                 transaction.addToBackStack(null);
@@ -129,8 +137,8 @@ public class MainActivity extends SampleActivityBase
             }
             case R.id.menu_settings: {
                 //Cambia al ConfigFragment para seleccionar la aplicación
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.sample_content_fragment, configFragment);
                 transaction.addToBackStack(null);
                 transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
@@ -138,10 +146,9 @@ public class MainActivity extends SampleActivityBase
                 break;
             }
             case R.id.menu_act_notificaciones: {
-                //textView.setText("Pulsado N");
                 //Cambia al ConfigFragment para seleccionar la aplicación
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.sample_content_fragment, notifiFragment);
                 transaction.addToBackStack(null);
 
@@ -153,11 +160,7 @@ public class MainActivity extends SampleActivityBase
         }
         return super.onOptionsItemSelected(item);
     }
-/*
-    public void onButtonClick(View view) {
 
-    }
-*/
     /**
      * Create a chain of targets that will receive log data
      */
@@ -180,10 +183,16 @@ public class MainActivity extends SampleActivityBase
         Log.i(TAG, "Ready");
     }
 
-    public void onFragmentInteraction(String id) {
-        //nothing by now
+    //Interfaces con ConfigFragment
+    public void ConfigFragmentInteraction(String nombre, String paquete, Drawable icono) {
+        notifiFragment.actualizaAppMonitorizada(nombre, paquete, icono);
     }
 
+    public void ConfigFragmentInteraction(String nombre, String paquete, int icono) {
+        notifiFragment.actualizaAppMonitorizada(nombre, paquete, icono);
+    }
+
+    //Interfaces con NotificacionFragment
     public void onFragmentInteraction(Uri uri) {
 
     }

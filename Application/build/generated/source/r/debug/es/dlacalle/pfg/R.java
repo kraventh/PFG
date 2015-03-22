@@ -303,9 +303,9 @@ containing a value of this type.
         public static final int imageView=0x7f0b0028;
         public static final int left=0x7f0b000e;
         public static final int log_fragment=0x7f0b001a;
-        public static final int menu_act_notificaciones=0x7f0b002b;
+        public static final int menu_act_notificaciones=0x7f0b002a;
         public static final int menu_connect_scan_bt=0x7f0b0029;
-        public static final int menu_settings=0x7f0b002a;
+        public static final int menu_settings=0x7f0b002b;
         public static final int new_devices=0x7f0b0015;
         public static final int paired_devices=0x7f0b0013;
         public static final int principal_textview=0x7f0b0019;

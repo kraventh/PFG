@@ -18,13 +18,13 @@ package es.dlacalle.pfg;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Fragment;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.app.Fragment;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -50,17 +50,65 @@ public class PFGFragment extends Fragment {
      * Name of the connected device
      */
     private String mConnectedDeviceName = null;
+    /**
+     * The Handler that gets information back from the BluetoothService
+     */
 
+    private final Handler mHandler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            Activity activity = getActivity();
+            switch (msg.what) {
+                case Constants.MESSAGE_STATE_CHANGE:
+                    switch (msg.arg1) {
+                        case ServicioBluetooth.STATE_CONNECTED:
+                            setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
+                            break;
+                        case ServicioBluetooth.STATE_CONNECTING:
+                            setStatus(R.string.title_connecting);
+                            break;
+                        case ServicioBluetooth.STATE_LISTEN:
+                        case ServicioBluetooth.STATE_NONE:
+                            setStatus(R.string.title_not_connected);
+                            break;
+                    }
+                    break;
+                case Constants.MESSAGE_WRITE:
+                    byte[] writeBuf = (byte[]) msg.obj;
+                    // construct a string from the buffer
+                    String writeMessage = new String(writeBuf);
+                    break;
+                case Constants.MESSAGE_READ:
+                    byte[] readBuf = (byte[]) msg.obj;
+                    // construct a string from the valid bytes in the buffer
+                    String readMessage = new String(readBuf, 0, msg.arg1);
+                    break;
+                case Constants.MESSAGE_DEVICE_NAME:
+                    // save the connected device's name
+                    mConnectedDeviceName = msg.getData().getString(Constants.DEVICE_NAME);
+                    if (null != activity) {
+                        Toast.makeText(activity, "Connected to "
+                                + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+                case Constants.MESSAGE_TOAST:
+                    if (null != activity) {
+                        Toast.makeText(activity, msg.getData().getString(Constants.TOAST),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+            }
+        }
+    };
     /**
      * String buffer for outgoing messages
      */
     private StringBuffer mOutStringBuffer;
-
     /**
      * Local Bluetooth adapter
      */
     private BluetoothAdapter mBluetoothAdapter = null;
-
     /**
      * Member object for the chat services
      */
@@ -80,7 +128,6 @@ public class PFGFragment extends Fragment {
             activity.finish();
         }
     }
-
 
     @Override
     public void onStart() {
@@ -127,19 +174,6 @@ public class PFGFragment extends Fragment {
     }
 
     /**
-     * Set up the UI and background operations for chat.
-     */
-    private void setupChat() {
-        Log.d(TAG, "setupChat()");
-
-        // Initialize the BluetoothChatService to perform bluetooth connections
-        mChatService = new ServicioBluetooth(getActivity(), mHandler);
-
-        // Initialize the buffer for outgoing messages
-        mOutStringBuffer = new StringBuffer("");
-    }
-
-    /**
      * Makes this device discoverable.
      * En principio no la necesito, pero la dejo por si acaso mas adelante la necesito
      */
@@ -151,6 +185,19 @@ public class PFGFragment extends Fragment {
             startActivity(discoverableIntent);
         }
     }*/
+
+    /**
+     * Set up the UI and background operations for chat.
+     */
+    private void setupChat() {
+        Log.d(TAG, "setupChat()");
+
+        // Initialize the BluetoothChatService to perform bluetooth connections
+        mChatService = new ServicioBluetooth(getActivity(), mHandler);
+
+        // Initialize the buffer for outgoing messages
+        mOutStringBuffer = new StringBuffer("");
+    }
 
     /**
      * Sends a message.
@@ -209,58 +256,6 @@ public class PFGFragment extends Fragment {
         }
         actionBar.setSubtitle(subTitle);
     }
-
-    /**
-     * The Handler that gets information back from the BluetoothService
-     */
-
-    private final Handler mHandler = new Handler() {
-
-        @Override
-        public void handleMessage(Message msg) {
-            Activity activity = getActivity();
-            switch (msg.what) {
-                case Constants.MESSAGE_STATE_CHANGE:
-                    switch (msg.arg1) {
-                        case ServicioBluetooth.STATE_CONNECTED:
-                            setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
-                            break;
-                        case ServicioBluetooth.STATE_CONNECTING:
-                            setStatus(R.string.title_connecting);
-                            break;
-                        case ServicioBluetooth.STATE_LISTEN:
-                        case ServicioBluetooth.STATE_NONE:
-                            setStatus(R.string.title_not_connected);
-                            break;
-                    }
-                    break;
-                case Constants.MESSAGE_WRITE:
-                    byte[] writeBuf = (byte[]) msg.obj;
-                    // construct a string from the buffer
-                    String writeMessage = new String(writeBuf);
-                    break;
-                case Constants.MESSAGE_READ:
-                    byte[] readBuf = (byte[]) msg.obj;
-                    // construct a string from the valid bytes in the buffer
-                    String readMessage = new String(readBuf, 0, msg.arg1);
-                    break;
-                case Constants.MESSAGE_DEVICE_NAME:
-                    // save the connected device's name
-                    mConnectedDeviceName = msg.getData().getString(Constants.DEVICE_NAME);
-                    if (null != activity) {
-                        Toast.makeText(activity, "Connected to "
-                                + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
-                    }
-                    break;
-                case Constants.MESSAGE_TOAST:
-                    if (null != activity) {
-                        Toast.makeText(activity, msg.getData().getString(Constants.TOAST),
-                                Toast.LENGTH_SHORT).show();
-                    }
-                    break;
-            }
-        }
-    };
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {

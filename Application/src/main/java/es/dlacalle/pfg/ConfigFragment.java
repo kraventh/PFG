@@ -1,22 +1,16 @@
 package es.dlacalle.pfg;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.app.Fragment;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.app.Fragment;
-import android.preference.CheckBoxPreference;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ListAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,32 +21,18 @@ import java.util.List;
  * Large screen devices (such as tablets) are supported by replacing the ListView
  * with a GridView.
  * <p/>
- * Activities containing this fragment MUST implement the {@link OnFragmentInteractionListener}
+ * Activities containing this fragment MUST implement the {@link es.dlacalle.pfg.ConfigFragment.ConfigFragmentListener}
  * interface.
  */
 public class ConfigFragment extends Fragment implements AbsListView.OnItemClickListener {
 
-    private OnFragmentInteractionListener mListener;
+    private ConfigFragmentListener mListener;
 
     /**
      * The Adapter which will be used to populate the ListView/GridView with
      * Views.
      */
     private MiArrayAdapter mAdapter;
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment ConfigFragment.
-     */
-    public static ConfigFragment newInstance() {
-        ConfigFragment fragment = new ConfigFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -105,7 +85,7 @@ public class ConfigFragment extends Fragment implements AbsListView.OnItemClickL
       The fragment's ListView/GridView.
      */
         AbsListView mListView = (AbsListView) view.findViewById(android.R.id.list);
-        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
+        mListView.setAdapter(mAdapter);
 
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
@@ -117,7 +97,7 @@ public class ConfigFragment extends Fragment implements AbsListView.OnItemClickL
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (OnFragmentInteractionListener) activity;
+            mListener = (ConfigFragmentListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " debe implementar OnFragmentInteractionListener");
@@ -133,20 +113,36 @@ public class ConfigFragment extends Fragment implements AbsListView.OnItemClickL
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (null != mListener) {
-            // Notify the active callbacks interface (the activity, if the
-            // fragment is attached to one) that an item has been selected.
-            //mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
-        }
+        //if (null != mListener) {
+        // Notify the active callbacks interface (the activity, if the
+        // fragment is attached to one) that an item has been selected.
+        //mListener.ConfigFragmentInteraction(DummyContent.ITEMS.get(position).id);
+        //}
 
-
+        //Si lo deselecciono reseteo la preferencia.
         if (this.mAdapter.getItem(position).getSeleccionado()) {
             this.mAdapter.getItem(position).setSeleccionado(false);
+            mListener.ConfigFragmentInteraction("Ninguna", "No hay aplicación seleccionada",
+                    R.drawable.ic_launcher);
 
+        } else {
+            //Si lo selecciono me aseguro que de los demás no está ninguno seleccionado
+            // y asigno los datos de la aplicación seleccionada
 
-        }
-        else {
+            for (int i = 0; i < this.mAdapter.getCount(); i++) {
+                this.mAdapter.getItem(i).setSeleccionado(false);
+            }
             this.mAdapter.getItem(position).setSeleccionado(true);
+
+            //Paso la información al activity para que la redirija al NotificacionesFragment
+            //ya que los fragments no deben comunicarse nunca directamente entre ellos segun
+            //la documentación de google
+
+            mListener.ConfigFragmentInteraction(
+                    this.mAdapter.getItem(position).getNombreApp(),
+                    this.mAdapter.getItem(position).getNombrePaquete(),
+                    this.mAdapter.getItem(position).getIcon()
+            );
 
         }
         this.mAdapter.notifyDataSetChanged();
@@ -164,8 +160,11 @@ public class ConfigFragment extends Fragment implements AbsListView.OnItemClickL
      * >Communicating with Other Fragments</a> for more information.
      */
 
-    public interface OnFragmentInteractionListener {
-        public void onFragmentInteraction(String id);
+    public interface ConfigFragmentListener {
+        public void ConfigFragmentInteraction(String nombre, String paquete, Drawable icono);
+
+        public void ConfigFragmentInteraction(String nombre, String paquete, int icono);
+
     }
 
 
