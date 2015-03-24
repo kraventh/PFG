@@ -48,12 +48,16 @@ public class MainActivity extends SampleActivityBase
         NotificacionesFragment.NotificationFragmentListener {
 
     public static final String TAG = "MainActivity";
+
+    //Campos
     public TextView textView;
 
+    //Fragments
     private PFGFragment pfgFragment;
     private ConfigFragment configFragment;
     private NotificacionesFragment notifiFragment;
 
+    //Receiver para las notificaciones
     private NotificationReceiver nReceiver;
 
     @Override
@@ -61,15 +65,18 @@ public class MainActivity extends SampleActivityBase
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //FRagments
         pfgFragment = new PFGFragment();
         configFragment = new ConfigFragment();
         notifiFragment = new NotificacionesFragment();
 
+        //Receiver para las notificaciones
         nReceiver = new NotificationReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction("es.dlacalle.pfg.servicios.NOTIFICATION_LISTENER_EXAMPLE");
         registerReceiver(nReceiver, filter);
 
+        //Campo
         textView = (TextView) findViewById(R.id.principal_textview);
 
 
@@ -81,7 +88,9 @@ public class MainActivity extends SampleActivityBase
             // Replace whatever is in the fragment_container view with this fragment,
             // and add the transaction to the back stack so the user can navigate back
 
-            transaction.replace(R.id.sample_content_fragment, pfgFragment).commit();
+            transaction.replace(R.id.sample_content_fragment, notifiFragment).commit();
+            getFragmentManager().beginTransaction().replace(R.id.sample_content_fragment, configFragment).commit();
+            getFragmentManager().beginTransaction().replace(R.id.sample_content_fragment, pfgFragment).commit();
 
             //getEstadoGeneral();
 
@@ -127,6 +136,7 @@ public class MainActivity extends SampleActivityBase
                 pfgFragment.onOptionsItemSelected(item);
                 //}
                 //case R.id.menu_home: {
+
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.sample_content_fragment, pfgFragment);
                 transaction.addToBackStack(null);
@@ -204,16 +214,18 @@ public class MainActivity extends SampleActivityBase
             SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             //Obtengo el nombre del paquete cuyas notificaciones quiero atender
             //"Ninguna" es el valor que devuelve por defecto si el campo estuviese vacío
-            String prefPackage = pref.getString("app_monitorizada_paquete", "Ninguna");
-            try {
-                String pkgName = intent.getStringExtra("notification_paquete");
-                temp = intent.getStringExtra("notification_event") + "\n" + textView.getText();
+            if (pref.getBoolean("habilitar_historico_notificaciones", false)) {
+                String prefPackage = pref.getString("app_monitorizada_paquete", "Ninguna");
+                try {
+                    String pkgName = intent.getStringExtra("notification_paquete");
+                    temp = intent.getStringExtra("notification_event") + "\n" + textView.getText();
 
-                if (pkgName.equals(prefPackage)) {
-                    textView.setText(temp);
+                    if (pkgName.equals(prefPackage)) {
+                        textView.setText(temp);
+                    }
+                } catch (Exception e) {
+                    textView.setText("Notificación desestimada: " + temp);
                 }
-            } catch (Exception e) {
-                textView.setText("Notificación desestimada: " + temp);
             }
 
 

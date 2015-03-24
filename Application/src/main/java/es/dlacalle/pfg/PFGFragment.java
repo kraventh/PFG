@@ -28,6 +28,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -176,6 +177,7 @@ public class PFGFragment extends Fragment {
                 mChatService.start();
             }
         }
+        getEstadoGeneral();
     }
 
     @Override
@@ -208,6 +210,12 @@ public class PFGFragment extends Fragment {
         if (mBtAdp.getScanMode() == BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE)
             btVisibleStatus.setText("Si");
         else btVisibleStatus.setText("No");
+
+        String enabledListeners = Settings.Secure.getString(getActivity().getApplicationContext().getContentResolver(),
+                "enabled_notification_listeners");
+        if (enabledListeners.contains("dlacalle.pfg")) accesoNotif.setText("Habilitado");
+        else accesoNotif.setText("Deshabilitado");
+
 
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         pfgAppTitle.setText(pref.getString("app_monitorizada_titulo", "Ninguna"));

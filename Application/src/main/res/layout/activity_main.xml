@@ -15,15 +15,20 @@
   -->
 <LinearLayout
       xmlns:android="http://schemas.android.com/apk/res/android"
-      android:orientation="vertical"
+    android:id="@+id/sample_main_layout"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:id="@+id/sample_main_layout">
+    android:orientation="vertical">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/ultimas_notificaciones"/>
+        android:background="@android:color/holo_green_dark"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:text="@string/ultimas_notificaciones"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#ffffffff" />
 
     <View
         android:layout_width="match_parent"
@@ -42,21 +47,21 @@
               android:layout_height="match_parent">
 
             <TextView
+                android:id="@+id/principal_textview"
                   style="@style/Widget.SampleMessage"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/vertical_page_margin"
                   android:paddingLeft="@dimen/horizontal_page_margin"
                   android:paddingRight="@dimen/horizontal_page_margin"
                   android:paddingTop="@dimen/vertical_page_margin"
-                  android:paddingBottom="@dimen/vertical_page_margin"
-                  android:text="@string/intro_message"
-                  android:id="@+id/principal_textview"/>
+                android:text="@string/intro_message" />
 
         </ScrollView>
 
         <fragment
-              android:name="es.dlacalle.common.logger.LogFragment"
               android:id="@+id/log_fragment"
+            android:name="es.dlacalle.common.logger.LogFragment"
               android:layout_width="match_parent"
               android:layout_height="match_parent" />
 
@@ -69,9 +74,9 @@
 
     <FrameLayout
           android:id="@+id/sample_content_fragment"
-          android:layout_weight="5"
           android:layout_width="match_parent"
-          android:layout_height="0px" />
+        android:layout_height="0px"
+        android:layout_weight="3.01" />
 
 </LinearLayout>
 
