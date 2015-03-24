@@ -51,6 +51,7 @@ public class PFGFragment extends Fragment {
     private static final String TAG = "PFGFragment";
 
     //Campos pfgFragment
+    TextView principal;
     TextView btStatus;
     TextView btVisibleStatus;
     TextView accesoNotif;
@@ -186,6 +187,7 @@ public class PFGFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_pfg, container, false);
 
         //Campos pfgFragment
+        principal = (TextView) v.findViewById(R.id.principal_textview);
         btStatus = (TextView) v.findViewById(R.id.pfg_bt_status);
         btVisibleStatus = (TextView) v.findViewById(R.id.pfg_bt_visible_status);
         accesoNotif = (TextView) v.findViewById(R.id.pfg_acceso_notif_status);

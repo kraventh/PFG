@@ -31,7 +31,6 @@ import android.widget.TextView;
 
 import es.dlacalle.common.activities.SampleActivityBase;
 import es.dlacalle.common.logger.Log;
-import es.dlacalle.common.logger.LogFragment;
 import es.dlacalle.common.logger.LogWrapper;
 import es.dlacalle.common.logger.MessageOnlyLogFilter;
 
@@ -186,10 +185,10 @@ public class MainActivity extends SampleActivityBase
         logWrapper.setNext(msgFilter);
 
         // On screen logging via a fragment with a TextView.
-        LogFragment logFragment = (LogFragment) getSupportFragmentManager()
+        /*LogFragment logFragment = (LogFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.log_fragment);
         msgFilter.setNext(logFragment.getLogView());
-
+*/
         Log.i(TAG, "Ready");
     }
 

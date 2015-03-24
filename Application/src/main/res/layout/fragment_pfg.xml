@@ -19,7 +19,7 @@
     android:background="#ff9d0aff"
     android:orientation="vertical">
 
-<LinearLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/holo_green_dark"
@@ -29,7 +29,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
             android:text="@string/mensaje_bienvenida"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#ffffffff" />
@@ -48,11 +48,11 @@
             android:id="@+id/pfg_bt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="false"
+            android:layout_alignParentStart="false"
             android:layout_alignParentTop="false"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:text="Bluetooth: "
+            android:layout_marginStart="10dp"
+            android:text="@string/labelBluetooth"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#ffffffff" />
 
@@ -60,15 +60,15 @@
             android:id="@+id/pfg_bt_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="false"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="false"
             android:layout_alignParentTop="false"
             android:layout_centerVertical="true"
             android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="178dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="178dp"
             android:layout_marginTop="10dp"
-            android:text="Activado"
+            android:text="@string/labelActivado"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#ffffffff"
             android:textStyle="bold" />
@@ -87,11 +87,11 @@
             android:id="@+id/pfg_bt_visible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="false"
+            android:layout_alignParentStart="false"
             android:layout_alignParentTop="false"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:text="Visible: "
+            android:layout_marginStart="10dp"
+            android:text="@string/labelVisible"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#ffffffff" />
 
@@ -99,15 +99,15 @@
             android:id="@+id/pfg_bt_visible_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="false"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="false"
             android:layout_alignParentTop="false"
             android:layout_centerVertical="true"
             android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="178dp"
-            android:layout_marginRight="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="178dp"
             android:layout_marginTop="10dp"
-            android:text="No"
+            android:text="@string/labelNo"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#ffffffff"
             android:textStyle="bold" />
@@ -126,11 +126,11 @@
             android:id="@+id/pfg_acceso_notif"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="false"
+            android:layout_alignParentStart="false"
             android:layout_alignParentTop="false"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:text="Acceso a notificaciones: "
+            android:layout_marginStart="10dp"
+            android:text="@string/labelAccesoNotif"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#ffffffff" />
 
@@ -138,15 +138,13 @@
             android:id="@+id/pfg_acceso_notif_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="false"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="false"
+            android:layout_alignEnd="@id/pfg_acceso_notif"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="false"
             android:layout_centerVertical="true"
             android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="178dp"
-            android:layout_marginRight="5dp"
             android:layout_marginTop="10dp"
-            android:text="Deshabilitado"
+            android:text="@string/labelDeshabilitado"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#ffffffff"
             android:textStyle="bold" />
@@ -165,11 +163,11 @@
             android:id="@+id/pfg_app_monitorizada"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="false"
+            android:layout_alignParentStart="false"
             android:layout_alignParentTop="false"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:text="Aplicación monitorizada"
+            android:layout_marginStart="10dp"
+            android:text="@string/labelAppMonitorizada"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#ffffffff" />
     </RelativeLayout>
@@ -186,10 +184,11 @@
             android:id="@+id/pfg_app_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:contentDescription="@string/labIconoApp" />
 
         <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dip"
             android:layout_marginEnd="6dip"

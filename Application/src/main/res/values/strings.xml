@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2014 The Android Open Source Project
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2014 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -45,5 +44,21 @@
     <!-- NotificacionesFragment -->
     <string name="lista_notificaciones">Listar notificaciones</string>
     <string name="ultimas_notificaciones">Ultimas notificaciones</string>
+    <string name="title_activity_tab3activity">tab3activity</string>
+
+
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="labelBluetooth">Bluetooth:</string>
+    <string name="labelActivado">Activado</string>
+    <string name="labelVisible">Visible:</string>
+    <string name="labelNo">No</string>
+    <string name="labelAccesoNotif">Acceso a notificaciones:</string>
+    <string name="labelDeshabilitado">Deshabilitado</string>
+    <string name="labelAppMonitorizada">Aplicación monitorizada</string>
+    <string name="labIconoApp">Icono de aplicación</string>
 
 </resources>
