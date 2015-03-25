@@ -215,19 +215,30 @@ public class PFGFragment extends Fragment {
 
         String enabledListeners = Settings.Secure.getString(getActivity().getApplicationContext().getContentResolver(),
                 "enabled_notification_listeners");
-        if (enabledListeners.contains("dlacalle.pfg")) accesoNotif.setText("Habilitado");
-        else accesoNotif.setText("Deshabilitado");
+        try {
+            if (enabledListeners.contains("dlacalle.pfg")) accesoNotif.setText("Habilitado");
+            else accesoNotif.setText("Deshabilitado");
+        }catch (Exception e){
+            Toast.makeText(getActivity().getApplicationContext(),
+                    "Fallo accesoNotif.setText()",
+                    Toast.LENGTH_SHORT).show();
+        }
 
 
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
         pfgAppTitle.setText(pref.getString("app_monitorizada_titulo", "Ninguna"));
-        pfgAppPaquete.setText(pref.getString("app_monitorizada_paquete", "No hay aplicación seleccionada"));
-        try {
-            pfgAppIcon.setImageDrawable(getActivity().getPackageManager().
-                    getPackageInfo(pfgAppPaquete.getText().toString(), 0).
-                    applicationInfo.loadIcon(getActivity().getPackageManager()));
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+        if(pfgAppTitle.getText().equals("Ninguna")){}
+        else {
+            pfgAppPaquete.setText(pref.getString("app_monitorizada_paquete", "No hay aplicación seleccionada"));
+            try {
+                pfgAppIcon.setImageDrawable(getActivity().getPackageManager().
+                        getPackageInfo(pfgAppPaquete.getText().toString(), 0).
+                        applicationInfo.loadIcon(getActivity().getPackageManager()));
+            } catch (PackageManager.NameNotFoundException e) {
+                Toast.makeText(getActivity().getApplicationContext(),
+                        "Aplicacion: " + pfgAppTitle.getText() + " no encontrada",
+                        Toast.LENGTH_SHORT).show();
+            }
         }
 
     }
@@ -336,7 +347,6 @@ public class PFGFragment extends Fragment {
                     Log.d(TAG, "BT not enabled");
                     Toast.makeText(getActivity(), R.string.bt_not_enabled_leaving,
                             Toast.LENGTH_SHORT).show();
-                    getActivity().finish();
                 }
         }
     }

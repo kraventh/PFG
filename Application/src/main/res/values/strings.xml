@@ -18,7 +18,7 @@
     <!--  BluetoothChat -->
     <string name="send">Enviar</string>
     <string name="not_connected">No está conectado a ningún dispositivo</string>
-    <string name="bt_not_enabled_leaving">Bluetooth no conectado. Saliendo...</string>
+    <string name="bt_not_enabled_leaving">Bluetooth no conectado</string>
     <string name="title_connecting">Conectando...</string>
     <string name="title_connected_to">Conectado a <xliff:g id="device_name">%1$s</xliff:g></string>
     <string name="title_not_connected">No conectado</string>
@@ -60,5 +60,6 @@
     <string name="labelDeshabilitado">Deshabilitado</string>
     <string name="labelAppMonitorizada">Aplicación monitorizada</string>
     <string name="labIconoApp">Icono de aplicación</string>
+    <string name="labelBluetoothConectado">Conectado a:</string>
 
 </resources>

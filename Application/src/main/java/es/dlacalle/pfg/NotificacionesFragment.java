@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,6 +13,9 @@ import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 
@@ -69,7 +73,7 @@ public class NotificacionesFragment extends PreferenceFragment
 
     }
 
-    /*
+/*
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
@@ -78,7 +82,7 @@ public class NotificacionesFragment extends PreferenceFragment
     
             return inflater.inflate(R.layout.fragment_notificaciones, container, false);
         }
-    */
+*/
 
     /**
      * Comprueba las preferencias guardadas y cumplimenta la preferenceScreen con los

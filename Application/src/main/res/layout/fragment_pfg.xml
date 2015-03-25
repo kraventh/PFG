@@ -105,14 +105,50 @@
             android:layout_centerVertical="true"
             android:layout_gravity="center_horizontal"
             android:layout_marginEnd="5dp"
-            android:layout_marginStart="178dp"
             android:layout_marginTop="10dp"
             android:text="@string/labelNo"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#ffffffff"
             android:textStyle="bold" />
     </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ff487aff"
+        android:paddingBottom="5dp"
+        android:paddingEnd="2dp"
+        android:paddingStart="2dp"
+        android:paddingTop="5dp">
 
+        <TextView
+            android:id="@+id/pfg_bt_con"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="false"
+            android:layout_alignParentTop="false"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:text="@string/labelBluetoothConectado"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#ffffffff" />
+
+        <TextView
+            android:id="@+id/pfg_bt_con_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="false"
+            android:layout_alignParentTop="false"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="178dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/title_not_connected"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#ffffffff"
+            android:textStyle="bold" />
+    </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -144,6 +180,7 @@
             android:layout_centerVertical="true"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="5dp"
             android:text="@string/labelDeshabilitado"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#ffffffff"

@@ -28,7 +28,7 @@
             android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:ellipsize="marquee"
-            android:fadingEdge="horizontal" />
+            android:fadingEdge="horizontal"/>
 
         <TextView android:id="@+id/ar_description"
             android:layout_width="wrap_content"
@@ -36,9 +36,9 @@
             android:layout_below="@+id/ar_title"
             android:layout_alignStart="@+id/ar_title"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="?android:attr/textColorSecondary"
-            android:maxLines="4" />
-
+            android:maxLines="4"
+            />
+<!--android:textColor="?android:attr/textColorSecondary"-->
     </RelativeLayout>
 
     <!-- Preference should place its actual preference widget here. -->

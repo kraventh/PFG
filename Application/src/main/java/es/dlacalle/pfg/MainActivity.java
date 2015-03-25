@@ -87,9 +87,9 @@ public class MainActivity extends SampleActivityBase
             // Replace whatever is in the fragment_container view with this fragment,
             // and add the transaction to the back stack so the user can navigate back
 
-            transaction.replace(R.id.sample_content_fragment, notifiFragment).commit();
-            getFragmentManager().beginTransaction().replace(R.id.sample_content_fragment, configFragment).commit();
-            getFragmentManager().beginTransaction().replace(R.id.sample_content_fragment, pfgFragment).commit();
+            transaction.replace(R.id.sample_content_fragment, notifiFragment, "notif").commit();
+            getFragmentManager().beginTransaction().replace(R.id.sample_content_fragment, configFragment, "config").commit();
+            getFragmentManager().beginTransaction().replace(R.id.sample_content_fragment, pfgFragment, "pfg").commit();
 
             //getEstadoGeneral();
 
@@ -132,15 +132,18 @@ public class MainActivity extends SampleActivityBase
 /*                Intent serverIntent = new Intent(this, DeviceListActivity.class);
                 startActivityForResult(serverIntent, Constants.REQUEST_CONNECT_DEVICE_SECURE);
                 return true;*/
-                pfgFragment.onOptionsItemSelected(item);
+
+                if(!(getFragmentManager().findFragmentByTag("pfg").isVisible())) {
+                    pfgFragment.onOptionsItemSelected(item);
                 //}
                 //case R.id.menu_home: {
 
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.sample_content_fragment, pfgFragment);
-                transaction.addToBackStack(null);
-                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                transaction.commit();
+                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                    transaction.replace(R.id.sample_content_fragment, pfgFragment);
+                    transaction.addToBackStack(null);
+                    transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                    transaction.commit();
+                }
                 pfgFragment.getEstadoGeneral();
                 break;
             }
