@@ -24,10 +24,16 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 
 import es.dlacalle.common.activities.SampleActivityBase;
 import es.dlacalle.common.logger.Log;
@@ -133,10 +139,10 @@ public class MainActivity extends SampleActivityBase
                 startActivityForResult(serverIntent, Constants.REQUEST_CONNECT_DEVICE_SECURE);
                 return true;*/
 
-                if(!(getFragmentManager().findFragmentByTag("pfg").isVisible())) {
+                if (!(getFragmentManager().findFragmentByTag("pfg").isVisible())) {
                     pfgFragment.onOptionsItemSelected(item);
-                //}
-                //case R.id.menu_home: {
+                    //}
+                    //case R.id.menu_home: {
 
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
                     transaction.replace(R.id.sample_content_fragment, pfgFragment);
@@ -173,6 +179,42 @@ public class MainActivity extends SampleActivityBase
         return super.onOptionsItemSelected(item);
     }
 
+    public void onButtonClick(View view) {
+        if (isExternalStorageWritable()) {
+            try {
+                // Ruta a la tarjetaSD
+                File sdcard = Environment.getExternalStorageDirectory();
+
+                // Añadimos la ruta a nuestro directorio
+                File dir = new File(sdcard.getAbsolutePath() + "/PFG/");
+
+                // Creamos nuestro directorio
+                if (!dir.mkdir()) Log.d(TAG, "Directorio no creado");
+
+                // Creamos el archivo en el que grabaremos los datos
+                File file = new File(dir, "pfg.log");
+
+                //Creamos el stream de salida
+                FileOutputStream os = new FileOutputStream(file);
+
+                //Recuperamos el texto a guardar
+                String data = textView.getText().toString();
+
+                //Lo escribimos y cerramos
+                os.write(data.getBytes());
+                os.close();
+            } catch (Exception e) {
+                Log.d(TAG, "Error guardando log");
+            }
+        }
+    }
+
+    /* Checks if external storage is available for read and write */
+    public boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        return Environment.MEDIA_MOUNTED.equals(state);
+    }
+
     /**
      * Create a chain of targets that will receive log data
      */
@@ -193,6 +235,105 @@ public class MainActivity extends SampleActivityBase
         msgFilter.setNext(logFragment.getLogView());
 */
         Log.i(TAG, "Ready");
+    }
+
+    //Función que prepara el texto para enviar al dispositivo externo
+    public void parseNotifMaps(String notifText) {
+        String mensaje = "maps;";
+        boolean rotonda = false;
+
+        Log.d(TAG, "Mensaje=> " + mensaje);
+
+        try {
+            //Primero elimino el nombre del destino para facilitar las extracciones posteriores
+            notifText = notifText.substring(notifText.indexOf(": "));
+            //
+            // Empezamos con las situaciones
+            //
+            // el mensaje lo compondremos de la siguiente manera:
+            // maps;direccion_a_pintar;
+
+            if (notifText.contains("Buscando GPS")) {
+                mensaje += "Esperando GPS...";
+            }
+            //Me da igual norte o sur, es siempre salir recto
+            else if (notifText.contains("norte") || notifText.contains("sur")) {
+                mensaje += "arriba;"; //Direccion a pintar
+
+            }
+            //Puede que tengamos que girar
+            else if (notifText.startsWith("Gira")) {
+                // a la izquierda
+                if (notifText.contains("izquierda")) mensaje += "izquierda;";
+                    //o a la derecha
+                else mensaje += "derecha;";
+            }
+            //O puede ser una rotonda
+            else if (notifText.contains("rotonda")) {
+                rotonda = true;
+                //Estoy considerando una rotonda como máximo de 5 salidas
+                if (notifText.contains("primera")) mensaje += "rotonda1;";
+                else if (notifText.contains("segunda")) mensaje += "rotonda2;";
+                else if (notifText.contains("tercera")) mensaje += "rotonda3;";
+                else if (notifText.contains("cuarta")) mensaje += "rotonda4;";
+                else if (notifText.contains("quinta")) mensaje += "rotonda5;";
+                else if (notifText.contains("recto")) mensaje += "rotondaRecto;";
+                    //O puede ser que estés en una de esas rotondas con urbanización incluida y
+                    //tengas que salirte ya por la próxima salida
+                else if (notifText.startsWith("Sal de la rotonda")) {
+                    mensaje += "rotondaSalida;";
+                }
+
+                //si no sales en
+                mensaje += notifText.substring(notifText.indexOf(Constants.EN) + Constants.EN.length()) + ";";
+                //sales hacia
+                mensaje += notifText.substring(notifText.lastIndexOf(Constants.HACIA) + Constants.HACIA.length()) + ";";
+            }
+
+            // O puede que te tengas que incorporar a una autovía o autopista
+            else if (notifText.startsWith(Constants.INCORPORATE)) {
+                mensaje += notifText.substring(Constants.INCORPORATE.length()) + ";";
+            }
+
+            // O puede que simplemente tengas que continuar por donde vas
+            else if (notifText.startsWith(Constants.CONTINUA)) {
+                mensaje += notifText.substring(Constants.CONTINUA.length()) + ";";
+            }
+
+            Log.d(TAG, "Mensaje prerotonda => " + mensaje);
+
+            if (!rotonda) {
+                //Añadimos el nombre de la vía por la que vamos
+                if (notifText.contains("en ") && notifText.contains("hacia")) {
+                    int inicio = notifText.indexOf("en ");
+                    int fin = notifText.lastIndexOf("hacia");
+
+                    Log.d(TAG, "Que mierda pasa" + inicio + ":" + fin);
+                    String tmp = notifText.substring(inicio + 3, fin-1);
+                    mensaje = mensaje + tmp + ";";
+                }
+                //Añadimos el nombre de la vía a la que nos dirigimos
+                if (notifText.contains("hacia")) {
+                    int fin = notifText.lastIndexOf("hacia");
+                    String tmp = notifText.substring(fin + 6, notifText.indexOf('\n'));
+                    mensaje = mensaje + tmp + ";";
+                }
+            }
+
+            Log.d(TAG, "Mensaje posrotonda => " + mensaje);
+            //Añadimos la distancia al destino estimada en tiempo y kilometros
+            if(notifText.contains(" hasta el destino")) {
+                mensaje += notifText.substring(notifText.indexOf('\n')+2, notifText.indexOf(" hasta el destino")) + ";";
+                //Añadimos la hora aproximada de llegada
+                mensaje += notifText.substring(notifText.indexOf("aproximada a las ") + 17);
+            }
+            Log.d(TAG, "Mensaje=> " + mensaje);
+
+            textView.setText(mensaje + "\n\n" + textView.getText());
+        } catch (NullPointerException e) {
+            mensaje = (String) textView.getText();
+            textView.setText("Instrucción errónea" + "\n\n" + mensaje);
+        }
     }
 
     //Interfaces
@@ -220,13 +361,23 @@ public class MainActivity extends SampleActivityBase
                 String prefPackage = pref.getString("app_monitorizada_paquete", "Ninguna");
                 try {
                     String pkgName = intent.getStringExtra("notification_paquete");
-                    temp = intent.getStringExtra("notification_event") + "\n" + textView.getText();
+                    String notificacion = intent.getStringExtra("notification_event");
+                    temp = notificacion + "\n\n" + textView.getText();
 
                     if (pkgName.equals(prefPackage)) {
                         textView.setText(temp);
+                        Log.d(TAG, "Notificacion recibida");
+
+                        if (pkgName.equals(Constants.MAPS)) {
+                            Log.d(TAG, "Es de Maps=> " + notificacion);
+
+                            parseNotifMaps(notificacion);
+                        }
                     }
                 } catch (Exception e) {
-                    textView.setText("Notificación desestimada: " + temp);
+                    if (pref.getBoolean("mostrar_notif_desestimadas", false)) {
+                        textView.setText("Notificación desestimada: " + temp + "\n\n");
+                    }
                 }
             }
 

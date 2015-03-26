@@ -28,6 +28,13 @@
             android:summary="Pulsa para vaciar"
             android:title="Caché de notificaciones" />
 
+        <CheckBoxPreference
+            android:key="mostrar_notif_desestimadas"
+            android:title="Mostrar todas"
+            android:summary="O sólo Aplicacion Monitorizada"
+            android:defaultValue="false"
+            />
+
     </PreferenceCategory>
     <PreferenceCategory android:title="Aplicación Monitorizada">
         <PreferenceScreen

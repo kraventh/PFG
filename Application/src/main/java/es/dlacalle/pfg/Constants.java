@@ -36,4 +36,11 @@ public interface Constants {
     public static final String DEVICE_NAME = "device_name";
     public static final String TOAST = "toast";
 
+    //Constantes para Maps
+    public static final String MAPS = "com.google.android.apps.maps";
+    public static final String EN = "en ";
+    public static final String HACIA = "hacia ";
+    public static final String INCORPORATE = "Incorpórate a";
+    public static final String CONTINUA = "Continúa por";
+
 }
