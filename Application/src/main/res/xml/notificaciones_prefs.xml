@@ -29,10 +29,10 @@
             android:title="Caché de notificaciones" />
 
         <CheckBoxPreference
-            android:key="mostrar_notif_desestimadas"
-            android:title="Mostrar todas"
-            android:summary="O sólo Aplicacion Monitorizada"
             android:defaultValue="false"
+            android:key="mostrar_notif_desestimadas"
+            android:summary="O sólo Aplicacion Monitorizada"
+            android:title="Mostrar todas"
             />
 
     </PreferenceCategory>
@@ -43,18 +43,20 @@
             android:summary="No hay aplicación seleccionada"
             android:title="Ninguna">
 
-            <EditTextPreference
-                android:defaultValue="Ninguna"
-                android:editable="false"
-                android:key="app_monitorizada_titulo"
-                android:title="Título" />
-            <EditTextPreference
-                android:defaultValue="No hay aplicación seleccionada"
-                android:editable="false"
-                android:key="app_monitorizada_paquete"
-                android:title="Paquete" />
-
         </PreferenceScreen>
+
+        <EditTextPreference
+            android:defaultValue="Ninguna"
+            android:editable="false"
+            android:key="app_monitorizada_titulo"
+            android:title="Título"
+            android:visibility="gone" />
+        <EditTextPreference
+            android:defaultValue="No hay aplicación seleccionada"
+            android:editable="false"
+            android:key="app_monitorizada_paquete"
+            android:title="Paquete"
+            android:visibility="gone" />
 
     </PreferenceCategory>
 </PreferenceScreen>

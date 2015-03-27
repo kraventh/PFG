@@ -24,6 +24,7 @@ public interface Constants {
     //Intent request codes
     public static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
     public static final int REQUEST_ENABLE_BT = 3;
+    public static final int REQUEST_APP_MONITORIZADA = 4;
 
     // Message types sent from the BluetoothChatService Handler
     public static final int MESSAGE_STATE_CHANGE = 1;
@@ -35,6 +36,11 @@ public interface Constants {
     // Key names received from the BluetoothChatService Handler
     public static final String DEVICE_NAME = "device_name";
     public static final String TOAST = "toast";
+
+    // AppListActivity
+    public static final String APP_NOMBRE = "app_nombre";
+    public static final String APP_PAQUETE = "app_paquete";
+    public static final String APP_ICONO = "app_icono";
 
     //Constantes para Maps
     public static final String MAPS = "com.google.android.apps.maps";

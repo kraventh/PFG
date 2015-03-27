@@ -14,11 +14,20 @@
 * limitations under the License.
 */
 
+//ToDo enviar Velocidad GPS, opci
+//Tramas:
+//  datos aplicación: maps;tipo_grafico;distancia_cambio;via_actual;via_siguiente;distancia_total;tiempo_total;hora_llegada
+//  datos sistema:  sistema;estado_gps;estado_cobertura;hora
+
+
 package es.dlacalle.pfg;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -26,14 +35,17 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.text.InputType;
+import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.InputStream;
 
 import es.dlacalle.common.activities.SampleActivityBase;
 import es.dlacalle.common.logger.Log;
@@ -49,7 +61,7 @@ import es.dlacalle.common.logger.MessageOnlyLogFilter;
  */
 
 public class MainActivity extends SampleActivityBase
-        implements ConfigFragment.ConfigFragmentListener,
+        implements
         NotificacionesFragment.NotificationFragmentListener {
 
     public static final String TAG = "MainActivity";
@@ -59,11 +71,14 @@ public class MainActivity extends SampleActivityBase
 
     //Fragments
     private PFGFragment pfgFragment;
-    private ConfigFragment configFragment;
+    private AppListActivity appListActivity;
     private NotificacionesFragment notifiFragment;
 
     //Receiver para las notificaciones
     private NotificationReceiver nReceiver;
+
+    //Otras variables
+    private String filename = ""; //Para el nombre del LOG
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +87,7 @@ public class MainActivity extends SampleActivityBase
 
         //FRagments
         pfgFragment = new PFGFragment();
-        configFragment = new ConfigFragment();
+        //appListActivity = new AppListActivity();
         notifiFragment = new NotificacionesFragment();
 
         //Receiver para las notificaciones
@@ -94,7 +109,7 @@ public class MainActivity extends SampleActivityBase
             // and add the transaction to the back stack so the user can navigate back
 
             transaction.replace(R.id.sample_content_fragment, notifiFragment, "notif").commit();
-            getFragmentManager().beginTransaction().replace(R.id.sample_content_fragment, configFragment, "config").commit();
+            //getFragmentManager().beginTransaction().replace(R.id.sample_content_fragment, appListActivity, "config").commit();
             getFragmentManager().beginTransaction().replace(R.id.sample_content_fragment, pfgFragment, "pfg").commit();
 
             //getEstadoGeneral();
@@ -154,17 +169,20 @@ public class MainActivity extends SampleActivityBase
                 break;
             }
             case R.id.menu_settings: {
-                //Cambia al ConfigFragment para seleccionar la aplicación
-
+                //Cambia al AppListActivity para seleccionar la aplicación
+                Intent serverIntent = new Intent(this, AppListActivity.class);
+                startActivityForResult(serverIntent, Constants.REQUEST_APP_MONITORIZADA);
+                return true;
+                /*
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.sample_content_fragment, configFragment);
+                transaction.replace(R.id.sample_content_fragment, appListActivity);
                 transaction.addToBackStack(null);
                 transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                 transaction.commit();
-                break;
+                break;*/
             }
             case R.id.menu_act_notificaciones: {
-                //Cambia al ConfigFragment para seleccionar la aplicación
+                //Cambia al AppListActivity para seleccionar la aplicación
 
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.sample_content_fragment, notifiFragment);
@@ -181,31 +199,60 @@ public class MainActivity extends SampleActivityBase
 
     public void onButtonClick(View view) {
         if (isExternalStorageWritable()) {
-            try {
-                // Ruta a la tarjetaSD
-                File sdcard = Environment.getExternalStorageDirectory();
 
-                // Añadimos la ruta a nuestro directorio
-                File dir = new File(sdcard.getAbsolutePath() + "/PFG/");
+            //Nombre por defecto del fichero
+            filename = "pfg-" + DateFormat.format("yyyyMMddHHmmss", new java.util.Date()) + ".log";
 
-                // Creamos nuestro directorio
-                if (!dir.mkdir()) Log.d(TAG, "Directorio no creado");
+            //Creo el dialogo para solicitar el nombre del fichero
+            //Campo de entrada: campo de texto (podriamos poner un datepicker o cualquier otra cosa)
+            final EditText input = new EditText(this);
+            input.setText(filename);
 
-                // Creamos el archivo en el que grabaremos los datos
-                File file = new File(dir, "pfg.log");
+            new AlertDialog.Builder(this)
+                    .setTitle("Nombre del archivo: ") //titulo
+                    .setView(input) //añado el edittext
+                    .setPositiveButton("Guardar", new DialogInterface.OnClickListener() { //
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            filename = input.getText().toString();
+                            try {
+                                // Ruta a la tarjetaSD
+                                File sdcard = Environment.getExternalStorageDirectory();
 
-                //Creamos el stream de salida
-                FileOutputStream os = new FileOutputStream(file);
+                                // Añadimos la ruta a nuestro directorio
+                                File dir = new File(sdcard.getAbsolutePath() + "/PFG/");
 
-                //Recuperamos el texto a guardar
-                String data = textView.getText().toString();
+                                // Creamos nuestro directorio
+                                if (!dir.mkdir()) Log.d(TAG, "Directorio no creado");
 
-                //Lo escribimos y cerramos
-                os.write(data.getBytes());
-                os.close();
-            } catch (Exception e) {
-                Log.d(TAG, "Error guardando log");
-            }
+                                // Creamos el archivo en el que grabaremos los datos
+                                File file = new File(dir, filename);
+
+                                //Creamos el stream de salida
+                                FileOutputStream os = new FileOutputStream(file, true);
+
+                                //Recuperamos el texto a guardar
+                                String data = textView.getText().toString();
+
+                                //Lo escribimos y cerramos
+                                os.write(data.getBytes());
+                                os.close();
+
+                                Toast.makeText(getApplicationContext(), "Guardado LOG en " +
+                                                file.getAbsolutePath(),
+                                        Toast.LENGTH_SHORT).show();
+                            } catch (Exception e) {
+                                Log.d(TAG, "Error guardando log");
+                            }
+                        }
+                    })
+                    .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            dialog.cancel();
+                        }
+                    })
+                    .show();
+
+
         }
     }
 
@@ -246,12 +293,18 @@ public class MainActivity extends SampleActivityBase
 
         try {
             //Primero elimino el nombre del destino para facilitar las extracciones posteriores
-            notifText = notifText.substring(notifText.indexOf(": "));
+            notifText = notifText.substring(notifText.indexOf(": ") + 1);
             //
             // Empezamos con las situaciones
             //
             // el mensaje lo compondremos de la siguiente manera:
-            // maps;direccion_a_pintar;
+            // maps;(distancia);direccion_a_pintar;
+
+
+            if (notifText.contains("m - ")) {
+                //Distancia restante por aquí
+                mensaje += notifText.substring(0, notifText.indexOf("m - ")) + ";";
+            }
 
             if (notifText.contains("Buscando GPS")) {
                 mensaje += "Esperando GPS...";
@@ -262,14 +315,14 @@ public class MainActivity extends SampleActivityBase
 
             }
             //Puede que tengamos que girar
-            else if (notifText.startsWith("Gira")) {
+            else if (notifText.contains("Gira")) {
                 // a la izquierda
                 if (notifText.contains("izquierda")) mensaje += "izquierda;";
                     //o a la derecha
                 else mensaje += "derecha;";
             }
             //O puede ser una rotonda
-            else if (notifText.contains("rotonda")) {
+            else if (notifText.contains("rotonda") || notifText.toLowerCase().contains("plaza")) {
                 rotonda = true;
                 //Estoy considerando una rotonda como máximo de 5 salidas
                 if (notifText.contains("primera")) mensaje += "rotonda1;";
@@ -282,12 +335,14 @@ public class MainActivity extends SampleActivityBase
                     //tengas que salirte ya por la próxima salida
                 else if (notifText.startsWith("Sal de la rotonda")) {
                     mensaje += "rotondaSalida;";
+                    if (notifText.contains(Constants.EN))
+                        //si no sales en
+                        mensaje += notifText.substring(notifText.indexOf(Constants.EN) + Constants.EN.length()) + ";";
+                    else
+                        //sales hacia
+                        mensaje += notifText.substring(notifText.lastIndexOf(Constants.HACIA) + Constants.HACIA.length()) + ";";
                 }
 
-                //si no sales en
-                mensaje += notifText.substring(notifText.indexOf(Constants.EN) + Constants.EN.length()) + ";";
-                //sales hacia
-                mensaje += notifText.substring(notifText.lastIndexOf(Constants.HACIA) + Constants.HACIA.length()) + ";";
             }
 
             // O puede que te tengas que incorporar a una autovía o autopista
@@ -309,7 +364,7 @@ public class MainActivity extends SampleActivityBase
                     int fin = notifText.lastIndexOf("hacia");
 
                     Log.d(TAG, "Que mierda pasa" + inicio + ":" + fin);
-                    String tmp = notifText.substring(inicio + 3, fin-1);
+                    String tmp = notifText.substring(inicio + 3, fin - 1);
                     mensaje = mensaje + tmp + ";";
                 }
                 //Añadimos el nombre de la vía a la que nos dirigimos
@@ -322,8 +377,8 @@ public class MainActivity extends SampleActivityBase
 
             Log.d(TAG, "Mensaje posrotonda => " + mensaje);
             //Añadimos la distancia al destino estimada en tiempo y kilometros
-            if(notifText.contains(" hasta el destino")) {
-                mensaje += notifText.substring(notifText.indexOf('\n')+2, notifText.indexOf(" hasta el destino")) + ";";
+            if (notifText.contains(" hasta el destino")) {
+                mensaje += notifText.substring(notifText.indexOf('\n') + 2, notifText.indexOf(" hasta el destino")) + ";";
                 //Añadimos la hora aproximada de llegada
                 mensaje += notifText.substring(notifText.indexOf("aproximada a las ") + 17);
             }
@@ -336,9 +391,19 @@ public class MainActivity extends SampleActivityBase
         }
     }
 
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case Constants.REQUEST_APP_MONITORIZADA:
+                //notifiFragment.compruebaAppMonitorizada();
+                break;
+
+        }
+    }
+
     //Interfaces
 
-    //Interfaces con ConfigFragment
+    //Interfaces con AppListActivity
     public void ConfigFragmentInteraction(String nombre, String paquete, Object icono) {
         notifiFragment.actualizaAppMonitorizada(nombre, paquete, icono);
     }
@@ -370,7 +435,6 @@ public class MainActivity extends SampleActivityBase
 
                         if (pkgName.equals(Constants.MAPS)) {
                             Log.d(TAG, "Es de Maps=> " + notificacion);
-
                             parseNotifMaps(notificacion);
                         }
                     }
